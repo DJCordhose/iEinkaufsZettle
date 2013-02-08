@@ -31,9 +31,9 @@
 		      <tr>
 		        <td
 		          valign='top'>
-		          <i:ShoppingListTable
+		          <c:CellTable
 		            addStyleNames='{style.cellTable}'
-		            ui:field='table' />
+		            ui:field='cellTable' />
 		        </td>
 		      </tr>
 		      <tr>
