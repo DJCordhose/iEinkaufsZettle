@@ -1,13 +1,21 @@
 package eu.zeigermann.gwt.demo.shared.boundary;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-
 @RemoteServiceRelativePath("list")
 public interface ShoppingBoundary extends RemoteService {
-	public ShoppingList createList(String name);
+	ShoppingList createList(String name);
+
+	List<ShoppingList> getAllLists();
+
+	void deleteList(ShoppingList list);
+	
+	ShoppingList saveList(ShoppingList list);
+	
 
 }
