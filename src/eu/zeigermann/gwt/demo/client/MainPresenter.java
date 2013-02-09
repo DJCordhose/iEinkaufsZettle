@@ -3,9 +3,11 @@ package eu.zeigermann.gwt.demo.client;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 
+import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
@@ -13,7 +15,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class MainPresenter implements MainView.EventHandler {
+public class MainPresenter implements MainView.Presenter {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 	private ShoppingBoundaryDtoAsync dtoService = GWT
@@ -22,7 +24,8 @@ public class MainPresenter implements MainView.EventHandler {
 	ListDataProvider<ShoppingList> dataProvider = new ListDataProvider<ShoppingList>();
 	ShoppingList currentList;
 	MainView view;
-	
+	HandlerManager eventBus;
+
 	public void deleteList(final ShoppingList list) {
 		service.deleteList(list, new AsyncCallback<Void>() {
 
@@ -112,7 +115,7 @@ public class MainPresenter implements MainView.EventHandler {
 
 	public void setView(MainView view) {
 		this.view = view;
-		view.setEventHandler(this);
+		view.setPresenter(this);
 	}
 
 	public ListDataProvider<ShoppingList> getDataProvider() {
@@ -126,6 +129,27 @@ public class MainPresenter implements MainView.EventHandler {
 	public void editList(ShoppingList list) {
 		this.currentList = list;
 		view.edit(list);
+	}
+
+	public HandlerManager getEventBus() {
+		return eventBus;
+	}
+
+	public void setEventBus(HandlerManager eventBus) {
+		this.eventBus = eventBus;
+	}
+
+	@Override
+	public void editItems() {
+		if (currentList == null) {
+			throw new IllegalStateException(
+					"Can not edit items without list being edited");
+		}
+		if (eventBus == null) {
+			throw new IllegalStateException(
+					"No eventsbus set");
+		}
+		eventBus.fireEvent(new EditItemsEvent(currentList));
 	}
 
 }

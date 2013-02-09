@@ -73,12 +73,13 @@ public class UIBinderMainView extends Composite implements MainView {
 	@UiField
 	Button editItemsButton;
 	
-	private MainView.EventHandler eventHandler;
+	private MainView.Presenter presenter;
 
-	private Mode mode = Mode.CREATE;
+	private Mode mode;
 
 	public UIBinderMainView(ListDataProvider<ShoppingList> dataProvider) {
 		initWidget(createWidget(dataProvider));
+		setMode(Mode.CREATE);
 	}
 
 	Widget createWidget(ListDataProvider<ShoppingList> dataProvider) {
@@ -103,7 +104,7 @@ public class UIBinderMainView extends Composite implements MainView {
 
 	@UiHandler("editItemsButton")
 	public void editItems(ClickEvent event) {
-		reset();
+		presenter.editItems();
 	}
 	
 	@UiHandler("createButton")
@@ -124,9 +125,9 @@ public class UIBinderMainView extends Composite implements MainView {
 		String text = nameTextBox.getText();
 		if (text.length() != 0) {
 			if (mode == Mode.EDIT) {
-				eventHandler.saveList(text);
+				presenter.saveList(text);
 			} else {
-				eventHandler.createList(text);
+				presenter.createList(text);
 			}
 		}
 		reset();
@@ -139,8 +140,8 @@ public class UIBinderMainView extends Composite implements MainView {
 	}
 
 	@Override
-	public void setEventHandler(EventHandler handler) {
-		this.eventHandler = handler;
+	public void setPresenter(Presenter handler) {
+		this.presenter = handler;
 	}
 
 	@Override
@@ -154,8 +155,12 @@ public class UIBinderMainView extends Composite implements MainView {
 		this.mode = mode;
 		if (mode == Mode.EDIT) {
 			createButton.setText("Save");
+			clearButton.setVisible(true);
+			editItemsButton.setVisible(true);
 		} else {
 			createButton.setText("Create");
+			clearButton.setVisible(false);
+			editItemsButton.setVisible(false);
 		}
 	}
 	
@@ -177,9 +182,10 @@ public class UIBinderMainView extends Composite implements MainView {
 					@Override
 					public void onCellPreview(
 							CellPreviewEvent<ShoppingList> event) {
-						if (Event.getTypeInt(event.getNativeEvent().getType()) == Event.ONCLICK || Event.getTypeInt(event.getNativeEvent().getType()) == Event.ONDBLCLICK ) {
+						int eventType = Event.getTypeInt(event.getNativeEvent().getType());
+						if (eventType == Event.ONCLICK) {
 							ShoppingList list = event.getValue();
-							eventHandler.editList(list);
+							presenter.editList(list);
 						}
 					}
 				});
@@ -236,7 +242,7 @@ public class UIBinderMainView extends Composite implements MainView {
 						new Delegate<ShoppingList>() {
 							@Override
 							public void execute(final ShoppingList list) {
-								eventHandler.editList(list);
+								presenter.editList(list);
 							}
 						})) {
 			@Override
@@ -255,7 +261,7 @@ public class UIBinderMainView extends Composite implements MainView {
 						new Delegate<ShoppingList>() {
 							@Override
 							public void execute(final ShoppingList list) {
-								eventHandler.deleteList(list);
+								presenter.deleteList(list);
 								reset();
 							}
 						})) {
