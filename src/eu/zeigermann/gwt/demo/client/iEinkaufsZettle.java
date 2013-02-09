@@ -8,7 +8,7 @@ public class iEinkaufsZettle implements EntryPoint {
 	public void onModuleLoad() {
 		RootLayoutPanel root = RootLayoutPanel.get();
 		MainPresenter presenter = new MainPresenter();
-		MainView view = new MainView(presenter.getDataProvider());
+		UIBinderMainView view = new UIBinderMainView(presenter.getDataProvider());
 		root.add(view);
 		presenter.setView(view);
 		presenter.load();

@@ -23,6 +23,8 @@
 		       <g:TextBox ui:field="nameTextBox" />
             </div>
 	        <g:Button ui:field="createButton" text="Create" addStyleNames="btn btn-primary"/>
+	        <g:Button ui:field="clearButton" text="Clear" addStyleNames="btn"/>
+	        <g:Button ui:field="editItemsButton" text="Edit Items" addStyleNames="btn"/>
 	      </div>
 	    </div>
 	    <div class="span8">

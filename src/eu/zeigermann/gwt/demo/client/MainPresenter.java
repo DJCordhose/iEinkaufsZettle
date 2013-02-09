@@ -2,7 +2,6 @@ package eu.zeigermann.gwt.demo.client;
 
 import java.util.List;
 
-import com.google.gwt.aria.client.MainRole;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
@@ -14,20 +13,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class MainPresenter {
-
-	public interface View {
-		public interface EventHandler {
-			void load();
-			void deleteList(ShoppingList list);
-			void saveList(String text);
-			void createList(String text);
-			void editList(ShoppingList list);
-			
-		}
-		void edit(ShoppingList list);
-		void setEventHandler(EventHandler handler);
-	}
+public class MainPresenter implements MainView.EventHandler {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 	private ShoppingBoundaryDtoAsync dtoService = GWT
@@ -35,7 +21,7 @@ public class MainPresenter {
 
 	ListDataProvider<ShoppingList> dataProvider = new ListDataProvider<ShoppingList>();
 	ShoppingList currentList;
-	View view;
+	MainView view;
 	
 	public void deleteList(final ShoppingList list) {
 		service.deleteList(list, new AsyncCallback<Void>() {
@@ -124,35 +110,9 @@ public class MainPresenter {
 		});
 	}
 
-	public void setView(View view) {
+	public void setView(MainView view) {
 		this.view = view;
-		view.setEventHandler(new View.EventHandler() {
-			
-			@Override
-			public void saveList(String name) {
-				MainPresenter.this.saveList(name);
-			}
-			
-			@Override
-			public void load() {
-				MainPresenter.this.load();
-			}
-			
-			@Override
-			public void editList(ShoppingList list) {
-				MainPresenter.this.editList(list);
-			}
-			
-			@Override
-			public void deleteList(ShoppingList list) {
-				MainPresenter.this.deleteList(list);
-			}
-			
-			@Override
-			public void createList(String name) {
-				MainPresenter.this.createList(name);
-			}
-		});
+		view.setEventHandler(this);
 	}
 
 	public ListDataProvider<ShoppingList> getDataProvider() {
