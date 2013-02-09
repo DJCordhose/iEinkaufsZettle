@@ -46,7 +46,7 @@ import com.google.gwt.view.client.ProvidesKey;
 
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class UIBinderMainView extends Composite implements MainView {
+public class UIBinderMainView extends Composite implements MainView { 
 
 	enum Mode {
 		EDIT, CREATE
@@ -73,7 +73,7 @@ public class UIBinderMainView extends Composite implements MainView {
 	@UiField
 	Button editItemsButton;
 	
-	private MainView.Presenter presenter;
+	private MainView.Handler presenter;
 
 	private Mode mode;
 
@@ -140,7 +140,7 @@ public class UIBinderMainView extends Composite implements MainView {
 	}
 
 	@Override
-	public void setPresenter(Presenter handler) {
+	public void setPresenter(Handler handler) {
 		this.presenter = handler;
 	}
 

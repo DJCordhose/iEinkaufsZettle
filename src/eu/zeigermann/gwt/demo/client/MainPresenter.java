@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.view.client.ListDataProvider;
 
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
@@ -15,7 +16,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class MainPresenter implements MainView.Presenter {
+public class MainPresenter implements MainView.Handler {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 	private ShoppingBoundaryDtoAsync dtoService = GWT
@@ -150,6 +151,20 @@ public class MainPresenter implements MainView.Presenter {
 					"No eventsbus set");
 		}
 		eventBus.fireEvent(new EditItemsEvent(currentList));
+	}
+
+	@Override
+	public void go(HasWidgets container) {
+		if (view == null) {
+			throw new IllegalStateException(
+					"No view set");
+		}
+		if (eventBus == null) {
+			throw new IllegalStateException(
+					"No eventsbus set");
+		}
+		container.add(view.asWidget());
+		load();
 	}
 
 }
