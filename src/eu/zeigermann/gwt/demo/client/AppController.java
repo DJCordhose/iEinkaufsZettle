@@ -1,5 +1,7 @@
 package eu.zeigermann.gwt.demo.client;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -32,21 +34,34 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         });  
   }
 
-	private void doEditItems(ShoppingList list, boolean createHistory) {
-		if (createHistory) {
-		    History.newItem("editList:"+list.getId(), false);
-		}
-	}
-
 	private void doEditLists(boolean createHistory) {
 		if (createHistory) {
 			History.newItem("editLists", false);
 		}
-	    MainPresenter mainPresenter = new MainPresenter();
-	    MainView view = new UIBinderMainView(mainPresenter.getDataProvider());
-	    mainPresenter.setEventBus(eventBus);
-	    mainPresenter.setView(view);
-	    mainPresenter.go(container);
+		GWT.runAsync(MainPresenter.class, new RunAsyncCallback() {
+			
+			@Override
+			public void onSuccess() {
+			    MainPresenter mainPresenter = new MainPresenter();
+			    MainView view = new DefaultMainView(mainPresenter.getDataProvider());
+			    mainPresenter.setEventBus(eventBus);
+			    mainPresenter.setView(view);
+			    mainPresenter.go(container);
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				GWT.log("Loading of module" + MainPresenter.class
+						+ " failed for reason: " + reason);
+			}
+		});
+	}
+
+	private void doEditItems(ShoppingList list, boolean createHistory) {
+		if (createHistory) {
+		    History.newItem("editList:"+list.getId(), false);
+		}
+//		GWT.runAsync
 	}
 
   public void go(final HasWidgets container) {

@@ -30,4 +30,9 @@
 
  <set-property name="user.agent" value="gecko1_8,safari"/>
 
+ <!-- Loads the main presenter together with the initial application frame code -->
+ <!-- Comment out when you think other links will be navigated to initially -->
+ <extend-configuration-property name="compiler.splitpoint.initial.sequence"
+	    value="eu.zeigermann.gwt.demo.client.MainPresenter"/>
+    
 </module>

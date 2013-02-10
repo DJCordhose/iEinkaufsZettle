@@ -46,13 +46,13 @@ import com.google.gwt.view.client.ProvidesKey;
 
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class UIBinderMainView extends Composite implements MainView { 
+public class DefaultMainView extends Composite implements MainView { 
 
 	enum Mode {
 		EDIT, CREATE
 	};
 
-	interface Binder extends UiBinder<Widget, UIBinderMainView> {
+	interface Binder extends UiBinder<Widget, DefaultMainView> {
 	}
 
 	@UiField(provided = true)
@@ -77,7 +77,7 @@ public class UIBinderMainView extends Composite implements MainView {
 
 	private Mode mode;
 
-	public UIBinderMainView(ListDataProvider<ShoppingList> dataProvider) {
+	public DefaultMainView(ListDataProvider<ShoppingList> dataProvider) {
 		initWidget(createWidget(dataProvider));
 		setMode(Mode.CREATE);
 	}
