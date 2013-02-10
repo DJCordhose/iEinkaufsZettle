@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package eu.zeigermann.gwt.demo.client.list;
+package eu.zeigermann.gwt.demo.client.item;
 
 import java.util.Comparator;
 
@@ -39,24 +39,25 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 
-public class DefaultMainView extends Composite implements MainView { 
+public class DefaultItemView extends Composite implements ItemView { 
 
 	enum Mode {
 		EDIT, CREATE
 	};
 
-	interface Binder extends UiBinder<Widget, DefaultMainView> {
+	interface Binder extends UiBinder<Widget, DefaultItemView> {
 	}
 
 	@UiField(provided = true)
-	CellTable<ShoppingList> cellTable;
+	CellTable<ItemDto> cellTable;
 
 	@UiField(provided = true)
 	SimplePager pager;
@@ -70,19 +71,17 @@ public class DefaultMainView extends Composite implements MainView {
 	@UiField
 	Button clearButton;
 
-	@UiField
-	Button editItemsButton;
 	
-	private MainView.Handler presenter;
+	private ItemView.Handler presenter;
 
 	private Mode mode;
 
-	public DefaultMainView(ListDataProvider<ShoppingList> dataProvider) {
+	public DefaultItemView(AbstractDataProvider<ItemDto> dataProvider) {
 		initWidget(createWidget(dataProvider));
 		setMode(Mode.CREATE);
 	}
 
-	Widget createWidget(ListDataProvider<ShoppingList> dataProvider) {
+	Widget createWidget(AbstractDataProvider<ItemDto> dataProvider) {
 		initTable(dataProvider);
 		
 		SimplePager.Resources pagerResources = GWT
@@ -102,11 +101,6 @@ public class DefaultMainView extends Composite implements MainView {
 		reset();
 	}
 
-	@UiHandler("editItemsButton")
-	public void editItems(ClickEvent event) {
-		presenter.editItems();
-	}
-	
 	@UiHandler("createButton")
 	public void create(ClickEvent event) {
 		createOrSave();
@@ -125,9 +119,9 @@ public class DefaultMainView extends Composite implements MainView {
 		String text = nameTextBox.getText();
 		if (text.length() != 0) {
 			if (mode == Mode.EDIT) {
-				presenter.saveList(text);
+				presenter.save(text);
 			} else {
-				presenter.createList(text);
+				presenter.create(text);
 			}
 		}
 		reset();
@@ -145,8 +139,8 @@ public class DefaultMainView extends Composite implements MainView {
 	}
 
 	@Override
-	public void edit(ShoppingList list) {
-		nameTextBox.setText(list.getName());
+	public void edit(ItemDto item) {
+		nameTextBox.setText(item.getName());
 		nameTextBox.setFocus(true);
 		setMode(Mode.EDIT);
 	}
@@ -156,36 +150,34 @@ public class DefaultMainView extends Composite implements MainView {
 		if (mode == Mode.EDIT) {
 			createButton.setText("Save");
 			clearButton.setVisible(true);
-			editItemsButton.setVisible(true);
 		} else {
 			createButton.setText("Create");
 			clearButton.setVisible(false);
-			editItemsButton.setVisible(false);
 		}
 	}
 	
-	private void initTable(ListDataProvider<ShoppingList> dataProvider) {
-		final ProvidesKey<ShoppingList> keyProvider = new ProvidesKey<ShoppingList>() {
-			public Object getKey(ShoppingList list) {
+	private void initTable(AbstractDataProvider<ItemDto> dataProvider) {
+		final ProvidesKey<ItemDto> keyProvider = new ProvidesKey<ItemDto>() {
+			public Object getKey(ItemDto list) {
 				return list == null ? null : list.getId();
 			}
 		};
-		cellTable = new CellTable<ShoppingList>(keyProvider);
+		cellTable = new CellTable<ItemDto>(keyProvider);
 		dataProvider.addDataDisplay(cellTable);
 		cellTable.setPageSize(5);
 
-		final MultiSelectionModel<ShoppingList> selectionModel = new MultiSelectionModel<ShoppingList>(
+		final MultiSelectionModel<ItemDto> selectionModel = new MultiSelectionModel<ItemDto>(
 				keyProvider);
 		cellTable.setSelectionModel(selectionModel,
-				new CellPreviewEvent.Handler<ShoppingList>() {
+				new CellPreviewEvent.Handler<ItemDto>() {
 
 					@Override
 					public void onCellPreview(
-							CellPreviewEvent<ShoppingList> event) {
+							CellPreviewEvent<ItemDto> event) {
 						int eventType = Event.getTypeInt(event.getNativeEvent().getType());
 						if (eventType == Event.ONCLICK) {
-							ShoppingList list = event.getValue();
-							presenter.editList(list);
+							ItemDto list = event.getValue();
+							presenter.edit(list);
 						}
 					}
 				});
@@ -204,10 +196,10 @@ public class DefaultMainView extends Composite implements MainView {
 		addDeleteColumn();
 	}
 
-	private void addNameColumn(ListDataProvider<ShoppingList> dataProvider) {
-		TextColumn<ShoppingList> nameColumn = new TextColumn<ShoppingList>() {
+	private void addNameColumn(AbstractDataProvider<ItemDto> dataProvider) {
+		TextColumn<ItemDto> nameColumn = new TextColumn<ItemDto>() {
 			@Override
-			public String getValue(ShoppingList list) {
+			public String getValue(ItemDto list) {
 				return list.getName();
 			}
 		};
@@ -215,11 +207,13 @@ public class DefaultMainView extends Composite implements MainView {
 		cellTable.addColumn(nameColumn, "Name");
 		cellTable.setColumnWidth(nameColumn, 500, Style.Unit.PX);
 
-		ListHandler<ShoppingList> columnSortHandler = new ListHandler<ShoppingList>(
+//		TODO: handle server side sorting
+		/*
+		ListHandler<ItemDto> columnSortHandler = new ListHandler<ItemDto>(
 				dataProvider.getList());
 		columnSortHandler.setComparator(nameColumn,
-				new Comparator<ShoppingList>() {
-					public int compare(ShoppingList o1, ShoppingList o2) {
+				new Comparator<ItemDto>() {
+					public int compare(ItemDto o1, ItemDto o2) {
 						if (o1 == o2) {
 							return 0;
 						}
@@ -233,20 +227,21 @@ public class DefaultMainView extends Composite implements MainView {
 				});
 		cellTable.addColumnSortHandler(columnSortHandler);
 		cellTable.getColumnSortList().push(nameColumn);
+		*/
 	}
 
 	private void addEditColumn() {
-		Column<ShoppingList, ShoppingList> deleteColumn = new Column<ShoppingList, ShoppingList>(
-				new ActionCell<ShoppingList>(SafeHtmlUtils
+		Column<ItemDto, ItemDto> deleteColumn = new Column<ItemDto, ItemDto>(
+				new ActionCell<ItemDto>(SafeHtmlUtils
 						.fromSafeConstant("<i class='icon-edit'></i>"),
-						new Delegate<ShoppingList>() {
+						new Delegate<ItemDto>() {
 							@Override
-							public void execute(final ShoppingList list) {
-								presenter.editList(list);
+							public void execute(final ItemDto item) {
+								presenter.edit(item);
 							}
 						})) {
 			@Override
-			public ShoppingList getValue(ShoppingList object) {
+			public ItemDto getValue(ItemDto object) {
 				return object;
 			}
 		};
@@ -255,18 +250,18 @@ public class DefaultMainView extends Composite implements MainView {
 	}
 
 	private void addDeleteColumn() {
-		Column<ShoppingList, ShoppingList> deleteColumn = new Column<ShoppingList, ShoppingList>(
-				new ActionCell<ShoppingList>(SafeHtmlUtils
+		Column<ItemDto, ItemDto> deleteColumn = new Column<ItemDto, ItemDto>(
+				new ActionCell<ItemDto>(SafeHtmlUtils
 						.fromSafeConstant("<i class='icon-remove'></i>"),
-						new Delegate<ShoppingList>() {
+						new Delegate<ItemDto>() {
 							@Override
-							public void execute(final ShoppingList list) {
-								presenter.deleteList(list);
+							public void execute(final ItemDto item) {
+								presenter.delete(item);
 								reset();
 							}
 						})) {
 			@Override
-			public ShoppingList getValue(ShoppingList object) {
+			public ItemDto getValue(ItemDto object) {
 				return object;
 			}
 		};

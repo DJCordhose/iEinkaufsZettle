@@ -17,7 +17,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class MainPresenter implements Presenter<MainView>, MainView.Handler {
+public class ShoppingListPresenter implements Presenter<ShoppingListView>, ShoppingListView.Handler {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 	private ShoppingBoundaryDtoAsync dtoService = GWT
@@ -25,10 +25,10 @@ public class MainPresenter implements Presenter<MainView>, MainView.Handler {
 
 	ListDataProvider<ShoppingList> dataProvider = new ListDataProvider<ShoppingList>();
 	ShoppingList currentList;
-	MainView view;
+	ShoppingListView view;
 	HandlerManager eventBus;
 
-	public void deleteList(final ShoppingList list) {
+	public void delete(final ShoppingList list) {
 		service.deleteList(list, new AsyncCallback<Void>() {
 
 			@Override
@@ -43,7 +43,7 @@ public class MainPresenter implements Presenter<MainView>, MainView.Handler {
 		});
 	}
 
-	public void saveList(String name) {
+	public void save(String name) {
 		if (currentList == null) {
 			throw new IllegalStateException(
 					"Can not save without list being edited");
@@ -69,7 +69,7 @@ public class MainPresenter implements Presenter<MainView>, MainView.Handler {
 		});
 	}
 
-	public void createList(String name) {
+	public void create(String name) {
 		service.createList(name, new AsyncCallback<ShoppingList>() {
 
 			@Override
@@ -116,7 +116,7 @@ public class MainPresenter implements Presenter<MainView>, MainView.Handler {
 	}
 
 	@Override
-	public void setView(MainView view) {
+	public void setView(ShoppingListView view) {
 		this.view = view;
 		view.setPresenter(this);
 	}
@@ -129,7 +129,7 @@ public class MainPresenter implements Presenter<MainView>, MainView.Handler {
 		this.dataProvider = dataProvider;
 	}
 
-	public void editList(ShoppingList list) {
+	public void edit(ShoppingList list) {
 		this.currentList = list;
 		view.edit(list);
 	}

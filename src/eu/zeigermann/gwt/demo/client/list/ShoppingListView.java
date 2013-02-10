@@ -4,13 +4,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public interface MainView {
+public interface ShoppingListView {
 	public interface Handler {
 		void load();
-		void deleteList(ShoppingList list);
-		void saveList(String text);
-		void createList(String text);
-		void editList(ShoppingList list);
+		void delete(ShoppingList list);
+		void save(String text);
+		void create(String text);
+		void edit(ShoppingList list);
 		void editItems();
 	}
 	void edit(ShoppingList list);

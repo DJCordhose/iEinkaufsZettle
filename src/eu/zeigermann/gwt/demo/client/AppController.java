@@ -10,9 +10,12 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
 import eu.zeigermann.gwt.demo.client.event.EditItemsEventHandler;
-import eu.zeigermann.gwt.demo.client.list.DefaultMainView;
-import eu.zeigermann.gwt.demo.client.list.MainPresenter;
-import eu.zeigermann.gwt.demo.client.list.MainView;
+import eu.zeigermann.gwt.demo.client.item.DefaultItemView;
+import eu.zeigermann.gwt.demo.client.item.ItemPresenter;
+import eu.zeigermann.gwt.demo.client.item.ItemView;
+import eu.zeigermann.gwt.demo.client.list.DefaultShoppingListView;
+import eu.zeigermann.gwt.demo.client.list.ShoppingListPresenter;
+import eu.zeigermann.gwt.demo.client.list.ShoppingListView;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 public class AppController implements ValueChangeHandler<String> {
@@ -41,18 +44,18 @@ public class AppController implements ValueChangeHandler<String> {
 		if (createHistory) {
 			History.newItem("editLists", false);
 		}
-		GWT.runAsync(MainPresenter.class, new RunAsyncCallback() {
+		GWT.runAsync(ShoppingListPresenter.class, new RunAsyncCallback() {
 			
 			@Override
 			public void onSuccess() {
-			    MainPresenter mainPresenter = new MainPresenter();
-			    MainView view = new DefaultMainView(mainPresenter.getDataProvider());
-			    navigateTo(mainPresenter, view);
+			    ShoppingListPresenter presenter = new ShoppingListPresenter();
+			    ShoppingListView view = new DefaultShoppingListView(presenter.getDataProvider());
+			    navigateTo(presenter, view);
 			}
 			
 			@Override
 			public void onFailure(Throwable reason) {
-				GWT.log("Loading of module" + MainPresenter.class
+				GWT.log("Loading of module" + ShoppingListPresenter.class
 						+ " failed for reason: " + reason);
 			}
 		});
@@ -62,25 +65,21 @@ public class AppController implements ValueChangeHandler<String> {
 		if (createHistory) {
 		    History.newItem("editList:"+list.getId(), false);
 		}
-		/*
-		GWT.runAsync(ItemsPresenter.class, new RunAsyncCallback() {
+		GWT.runAsync(ItemPresenter.class, new RunAsyncCallback() {
 			
 			@Override
 			public void onSuccess() {
-				ItemsPresenter mainPresenter = new ItemsPresenter();
-			    ItemsView view = new DefaultItemsView(mainPresenter.getDataProvider());
-			    mainPresenter.setEventBus(eventBus);
-			    mainPresenter.setView(view);
-			    mainPresenter.go(container);
+				ItemPresenter presenter = new ItemPresenter();
+			    ItemView view = new DefaultItemView(presenter.getDataProvider());
+			    navigateTo(presenter, view);
 			}
 			
 			@Override
 			public void onFailure(Throwable reason) {
-				GWT.log("Loading of module" + ItemsPresenter.class
+				GWT.log("Loading of module" + ItemPresenter.class
 						+ " failed for reason: " + reason);
 			}
 		});
-		*/
 	}
 	
 	private <V> void navigateTo(Presenter<V> presenter, V view ) {
