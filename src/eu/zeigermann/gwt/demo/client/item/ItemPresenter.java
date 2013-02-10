@@ -1,10 +1,19 @@
 package eu.zeigermann.gwt.demo.client.item;
 
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.cellview.client.ColumnSortList;
+import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
@@ -12,21 +21,32 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class ItemPresenter implements Presenter<ItemView>, ItemView.Handler {
+public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler {
 
-	private ShoppingBoundaryDtoAsync dtoService = GWT
+	private ShoppingBoundaryDtoAsync service = GWT
 			.create(ShoppingBoundaryDto.class);
 
 	AsyncDataProvider<ItemDto> dataProvider;
-	ShoppingList currentList;
 	ItemDto currentItem;
-	ItemView view;
-	HandlerManager eventBus;
+	final int currentListId;
+	final ItemView view;
+	final HandlerManager eventBus;
 
-	@Override
-	public void setView(ItemView view) {
+	public ItemPresenter(int listId, ItemView view, HandlerManager eventBus) {
+		this.currentListId = listId;
 		this.view = view;
-		view.setPresenter(this);
+		this.eventBus = eventBus;
+		this.dataProvider = new AsyncDataProvider<ItemDto>() {
+			@Override
+			protected void onRangeChanged(HasData<ItemDto> display) {
+				Range range = display.getVisibleRange();
+				ColumnSortList sortList = ItemPresenter.this.view
+						.getTableColumnSortList();
+				loadData(range, sortList);
+			}
+		};
+		view.setViewHandler(this);
+		view.setDataProvider(dataProvider);
 	}
 
 	public AbstractDataProvider<ItemDto> getDataProvider() {
@@ -43,52 +63,92 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.Handler {
 	}
 
 	@Override
-	public void setEventBus(HandlerManager eventBus) {
-		this.eventBus = eventBus;
-	}
-
-	@Override
 	public void go(HasWidgets container) {
+		container.clear();
 		if (view == null) {
-			throw new IllegalStateException(
-					"No view set");
+			throw new IllegalStateException("No view set");
 		}
 		if (eventBus == null) {
-			throw new IllegalStateException(
-					"No eventsbus set");
+			throw new IllegalStateException("No eventsbus set");
 		}
 		container.add(view.asWidget());
-		load();
+		init();
 	}
 
 	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
+	public void init() {
+		service.getItemCount(currentListId, new AsyncCallback<Integer>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+
+			@Override
+			public void onSuccess(Integer rows) {
+				view.setTableRowCount(rows);
+			}
+		});
+	}
+
+	@Override
+	public void loadData(Range range, ColumnSortList sortList) {
+		// XXX this data structure looses the order of sorting, but it is good
+		// enough for and to get the point across
+		Map<String, Boolean> sortInfo = new HashMap<String, Boolean>();
+		for (int i = 0; i < sortList.size(); i++) {
+			ColumnSortInfo columnSortInfo = sortList.get(0);
+			boolean ascending = columnSortInfo.isAscending();
+			String dataStoreName = columnSortInfo.getColumn()
+					.getDataStoreName();
+			if (dataStoreName == null) {
+				throw new IllegalArgumentException(
+						"If you want to sort a column on the server, give it data store name!");
+			}
+			sortInfo.put(dataStoreName, ascending);
+
+		}
+		final int start = range.getStart();
+		int length = range.getLength();
+
+		service.getItems(currentListId, start, length, sortInfo,
+				new AsyncCallback<List<ItemDto>>() {
+
+					@Override
+					public void onSuccess(List<ItemDto> data) {
+						view.setVisibleTableData(start, data);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						GWT.log("Error: " + caught);
+					}
+				});
+
 	}
 
 	@Override
 	public void delete(ItemDto item) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void save(String text) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void create(String text) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void edit(ItemDto item) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

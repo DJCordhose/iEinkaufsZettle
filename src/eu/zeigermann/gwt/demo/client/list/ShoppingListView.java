@@ -1,11 +1,12 @@
 package eu.zeigermann.gwt.demo.client.list;
 
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
 
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 public interface ShoppingListView {
-	public interface Handler {
+	public interface ViewHandler {
 		void load();
 		void delete(ShoppingList list);
 		void save(String text);
@@ -14,6 +15,7 @@ public interface ShoppingListView {
 		void editItems();
 	}
 	void edit(ShoppingList list);
-	void setPresenter(Handler handler);
+	void setViewHandler(ViewHandler handler);
 	Widget asWidget();
+	void setDataProvider(ListDataProvider<ShoppingList> dataProvider);
 }

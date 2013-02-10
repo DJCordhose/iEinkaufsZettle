@@ -17,7 +17,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class ShoppingListPresenter implements Presenter<ShoppingListView>, ShoppingListView.Handler {
+public class ShoppingListPresenter implements Presenter<ShoppingListView>, ShoppingListView.ViewHandler {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 	private ShoppingBoundaryDtoAsync dtoService = GWT
@@ -25,8 +25,15 @@ public class ShoppingListPresenter implements Presenter<ShoppingListView>, Shopp
 
 	ListDataProvider<ShoppingList> dataProvider = new ListDataProvider<ShoppingList>();
 	ShoppingList currentList;
-	ShoppingListView view;
-	HandlerManager eventBus;
+	final ShoppingListView view;
+	final HandlerManager eventBus;
+	
+	public ShoppingListPresenter(ShoppingListView view, HandlerManager eventBus) {
+		this.view = view;
+		view.setViewHandler(this);
+		view.setDataProvider(dataProvider);
+		this.eventBus = eventBus;
+	}
 
 	public void delete(final ShoppingList list) {
 		service.deleteList(list, new AsyncCallback<Void>() {
@@ -115,11 +122,6 @@ public class ShoppingListPresenter implements Presenter<ShoppingListView>, Shopp
 		});
 	}
 
-	@Override
-	public void setView(ShoppingListView view) {
-		this.view = view;
-		view.setPresenter(this);
-	}
 
 	public ListDataProvider<ShoppingList> getDataProvider() {
 		return dataProvider;
@@ -139,11 +141,6 @@ public class ShoppingListPresenter implements Presenter<ShoppingListView>, Shopp
 	}
 
 	@Override
-	public void setEventBus(HandlerManager eventBus) {
-		this.eventBus = eventBus;
-	}
-
-	@Override
 	public void editItems() {
 		if (currentList == null) {
 			throw new IllegalStateException(
@@ -158,6 +155,7 @@ public class ShoppingListPresenter implements Presenter<ShoppingListView>, Shopp
 
 	@Override
 	public void go(HasWidgets container) {
+		container.clear();
 		if (view == null) {
 			throw new IllegalStateException(
 					"No view set");

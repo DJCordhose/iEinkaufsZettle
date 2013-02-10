@@ -8,11 +8,15 @@ import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
-@NamedQueries({ @NamedQuery(name = Item.QUERY_ALL, query = "SELECT o FROM " + Item.TABLE + " o") })
+@NamedQueries({
+	@NamedQuery(name = Item.QUERY_ALL, query = "SELECT o FROM " + Item.TABLE + " o"),
+	@NamedQuery(name = Item.QUERY_COUNT_ITEMS, query = "SELECT count(o) FROM " + Item.TABLE + " o where o.list = :list")
+	})
 @Table(name=Item.TABLE)
 public class Item extends AbstractShoppingEntity {
 	public final static String TABLE = "Item";
 	public final static String QUERY_ALL = TABLE + ".all";
+	public final static String QUERY_COUNT_ITEMS = TABLE + ".cntItems";
 
 	boolean checked;
 

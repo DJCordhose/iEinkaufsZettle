@@ -15,7 +15,7 @@
  */
 package eu.zeigermann.gwt.demo.client.item;
 
-import java.util.Comparator;
+import java.util.List;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
@@ -30,7 +30,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
+import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -39,15 +41,14 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AbstractDataProvider;
+import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.CellPreviewEvent;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 
-public class DefaultItemView extends Composite implements ItemView { 
+public class DefaultItemView extends Composite implements ItemView {
 
 	enum Mode {
 		EDIT, CREATE
@@ -71,19 +72,19 @@ public class DefaultItemView extends Composite implements ItemView {
 	@UiField
 	Button clearButton;
 
-	
-	private ItemView.Handler presenter;
+	private ItemView.ViewHandler presenter;
 
 	private Mode mode;
 
-	public DefaultItemView(AbstractDataProvider<ItemDto> dataProvider) {
+	@Override
+	public void setDataProvider(AsyncDataProvider<ItemDto> dataProvider) {
 		initWidget(createWidget(dataProvider));
 		setMode(Mode.CREATE);
 	}
 
-	Widget createWidget(AbstractDataProvider<ItemDto> dataProvider) {
+	Widget createWidget(AsyncDataProvider<ItemDto> dataProvider) {
 		initTable(dataProvider);
-		
+
 		SimplePager.Resources pagerResources = GWT
 				.create(SimplePager.Resources.class);
 
@@ -134,7 +135,7 @@ public class DefaultItemView extends Composite implements ItemView {
 	}
 
 	@Override
-	public void setPresenter(Handler handler) {
+	public void setViewHandler(ViewHandler handler) {
 		this.presenter = handler;
 	}
 
@@ -155,8 +156,8 @@ public class DefaultItemView extends Composite implements ItemView {
 			clearButton.setVisible(false);
 		}
 	}
-	
-	private void initTable(AbstractDataProvider<ItemDto> dataProvider) {
+
+	private void initTable(AsyncDataProvider<ItemDto> dataProvider) {
 		final ProvidesKey<ItemDto> keyProvider = new ProvidesKey<ItemDto>() {
 			public Object getKey(ItemDto list) {
 				return list == null ? null : list.getId();
@@ -172,9 +173,9 @@ public class DefaultItemView extends Composite implements ItemView {
 				new CellPreviewEvent.Handler<ItemDto>() {
 
 					@Override
-					public void onCellPreview(
-							CellPreviewEvent<ItemDto> event) {
-						int eventType = Event.getTypeInt(event.getNativeEvent().getType());
+					public void onCellPreview(CellPreviewEvent<ItemDto> event) {
+						int eventType = Event.getTypeInt(event.getNativeEvent()
+								.getType());
 						if (eventType == Event.ONCLICK) {
 							ItemDto list = event.getValue();
 							presenter.edit(list);
@@ -190,13 +191,25 @@ public class DefaultItemView extends Composite implements ItemView {
 		// makes selection invisible on every even row
 		// cellTable.addStyleName("table-striped");
 
+		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
+
 		// columns
-		addNameColumn(dataProvider);
+		addNameColumn(columnSortHandler);
 		addEditColumn();
 		addDeleteColumn();
 	}
 
-	private void addNameColumn(AbstractDataProvider<ItemDto> dataProvider) {
+	@Override
+	public void setVisibleTableData(int start, List<? extends ItemDto> data) {
+		cellTable.setRowData(start, data);
+	}
+
+	@Override
+	public void setTableRowCount(int rows) {
+		cellTable.setRowCount(rows, true);
+	}
+
+	private void addNameColumn(ColumnSortEvent.Handler columnSortHandler) {
 		TextColumn<ItemDto> nameColumn = new TextColumn<ItemDto>() {
 			@Override
 			public String getValue(ItemDto list) {
@@ -204,30 +217,13 @@ public class DefaultItemView extends Composite implements ItemView {
 			}
 		};
 		nameColumn.setSortable(true);
+		nameColumn.setDataStoreName("item");
 		cellTable.addColumn(nameColumn, "Name");
 		cellTable.setColumnWidth(nameColumn, 500, Style.Unit.PX);
 
-//		TODO: handle server side sorting
-		/*
-		ListHandler<ItemDto> columnSortHandler = new ListHandler<ItemDto>(
-				dataProvider.getList());
-		columnSortHandler.setComparator(nameColumn,
-				new Comparator<ItemDto>() {
-					public int compare(ItemDto o1, ItemDto o2) {
-						if (o1 == o2) {
-							return 0;
-						}
-
-						if (o1 != null) {
-							return o2 != null ? o1.getName().compareTo(
-									o2.getName()) : 1;
-						}
-						return -1;
-					}
-				});
 		cellTable.addColumnSortHandler(columnSortHandler);
 		cellTable.getColumnSortList().push(nameColumn);
-		*/
+
 	}
 
 	private void addEditColumn() {
@@ -267,6 +263,11 @@ public class DefaultItemView extends Composite implements ItemView {
 		};
 		cellTable.addColumn(deleteColumn,
 				SafeHtmlUtils.fromSafeConstant("<br/>"));
+	}
+
+	@Override
+	public ColumnSortList getTableColumnSortList() {
+		return cellTable.getColumnSortList();
 	}
 
 }

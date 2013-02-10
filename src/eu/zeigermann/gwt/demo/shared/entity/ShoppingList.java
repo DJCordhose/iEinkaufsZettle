@@ -13,7 +13,10 @@ import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
-@NamedQueries({ @NamedQuery(name = ShoppingList.QUERY_ALL, query = "SELECT o FROM " + ShoppingList.TABLE + " o") })
+@NamedQueries(
+		{ 
+			@NamedQuery(name = ShoppingList.QUERY_ALL, query = "SELECT o FROM " + ShoppingList.TABLE + " o")
+		})
 @Table(name=ShoppingList.TABLE)
 public class ShoppingList extends AbstractShoppingEntity {
 	public final static String TABLE = "ShoppingList";

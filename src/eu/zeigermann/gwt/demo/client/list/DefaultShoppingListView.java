@@ -73,15 +73,16 @@ public class DefaultShoppingListView extends Composite implements ShoppingListVi
 	@UiField
 	Button editItemsButton;
 	
-	private ShoppingListView.Handler presenter;
+	private ShoppingListView.ViewHandler presenter;
 
 	private Mode mode;
 
-	public DefaultShoppingListView(ListDataProvider<ShoppingList> dataProvider) {
+	@Override
+	public void setDataProvider(ListDataProvider<ShoppingList> dataProvider) {
 		initWidget(createWidget(dataProvider));
 		setMode(Mode.CREATE);
 	}
-
+	
 	Widget createWidget(ListDataProvider<ShoppingList> dataProvider) {
 		initTable(dataProvider);
 		
@@ -140,7 +141,7 @@ public class DefaultShoppingListView extends Composite implements ShoppingListVi
 	}
 
 	@Override
-	public void setPresenter(Handler handler) {
+	public void setViewHandler(ViewHandler handler) {
 		this.presenter = handler;
 	}
 

@@ -1,6 +1,7 @@
 package eu.zeigermann.gwt.demo.server.boundary;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -37,5 +38,20 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 		List<Item> items = list.getItems();
 		List<ItemDto> dto = wrapDetachService.wrap(items);
 		return dto;
+	}
+
+	@Override
+	public List<ItemDto> getItems(int listId, int start, int length,
+			Map<String, Boolean> sortInfo) {
+		ShoppingList list = service.find(listId);
+		List<Item> items = service.getItems(list, start, length, sortInfo);
+		List<ItemDto> dto = wrapDetachService.wrap(items);
+		return dto;
+	}
+
+	@Override
+	public int getItemCount(int listId) {
+		ShoppingList list = service.find(listId);
+		return service.countItems(list);
 	}
 }
