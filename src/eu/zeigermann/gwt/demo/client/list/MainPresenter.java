@@ -1,4 +1,4 @@
-package eu.zeigermann.gwt.demo.client;
+package eu.zeigermann.gwt.demo.client.list;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.view.client.ListDataProvider;
 
+import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
@@ -16,7 +17,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class MainPresenter implements MainView.Handler {
+public class MainPresenter implements Presenter<MainView>, MainView.Handler {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 	private ShoppingBoundaryDtoAsync dtoService = GWT
@@ -114,6 +115,7 @@ public class MainPresenter implements MainView.Handler {
 		});
 	}
 
+	@Override
 	public void setView(MainView view) {
 		this.view = view;
 		view.setPresenter(this);
@@ -136,6 +138,7 @@ public class MainPresenter implements MainView.Handler {
 		return eventBus;
 	}
 
+	@Override
 	public void setEventBus(HandlerManager eventBus) {
 		this.eventBus = eventBus;
 	}

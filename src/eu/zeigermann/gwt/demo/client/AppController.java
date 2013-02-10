@@ -10,9 +10,12 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
 import eu.zeigermann.gwt.demo.client.event.EditItemsEventHandler;
+import eu.zeigermann.gwt.demo.client.list.DefaultMainView;
+import eu.zeigermann.gwt.demo.client.list.MainPresenter;
+import eu.zeigermann.gwt.demo.client.list.MainView;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
-public class AppController implements Presenter, ValueChangeHandler<String> {
+public class AppController implements ValueChangeHandler<String> {
   private final HandlerManager eventBus;
   private HasWidgets container;
   
@@ -44,9 +47,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 			public void onSuccess() {
 			    MainPresenter mainPresenter = new MainPresenter();
 			    MainView view = new DefaultMainView(mainPresenter.getDataProvider());
-			    mainPresenter.setEventBus(eventBus);
-			    mainPresenter.setView(view);
-			    mainPresenter.go(container);
+			    navigateTo(mainPresenter, view);
 			}
 			
 			@Override
@@ -61,7 +62,31 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 		if (createHistory) {
 		    History.newItem("editList:"+list.getId(), false);
 		}
-//		GWT.runAsync
+		/*
+		GWT.runAsync(ItemsPresenter.class, new RunAsyncCallback() {
+			
+			@Override
+			public void onSuccess() {
+				ItemsPresenter mainPresenter = new ItemsPresenter();
+			    ItemsView view = new DefaultItemsView(mainPresenter.getDataProvider());
+			    mainPresenter.setEventBus(eventBus);
+			    mainPresenter.setView(view);
+			    mainPresenter.go(container);
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				GWT.log("Loading of module" + ItemsPresenter.class
+						+ " failed for reason: " + reason);
+			}
+		});
+		*/
+	}
+	
+	private <V> void navigateTo(Presenter<V> presenter, V view ) {
+	    presenter.setEventBus(eventBus);
+	    presenter.setView(view);
+	    presenter.go(container);
 	}
 
   public void go(final HasWidgets container) {

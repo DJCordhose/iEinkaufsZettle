@@ -1,11 +1,11 @@
-package eu.zeigermann.gwt.demo.client;
+package eu.zeigermann.gwt.demo.client.list;
 
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 public interface MainView {
-	public interface Handler extends Presenter {
+	public interface Handler {
 		void load();
 		void deleteList(ShoppingList list);
 		void saveList(String text);

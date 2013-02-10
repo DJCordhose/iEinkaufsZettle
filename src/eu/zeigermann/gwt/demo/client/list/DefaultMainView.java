@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package eu.zeigermann.gwt.demo.client;
+package eu.zeigermann.gwt.demo.client.list;
 
 import java.util.Comparator;
 
