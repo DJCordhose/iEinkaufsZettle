@@ -24,12 +24,18 @@
 		            </label>
 			       <g:TextBox ui:field="nameTextBox" />
 	            </div>
+	            <div class="control-group">
+		            <label>
+		                <span>Shop</span>
+		            </label>
+			       <g:ListBox ui:field="shopList" />
+	            </div>
 		        <g:Button ui:field="createButton" text="Create" addStyleNames="btn btn-primary"/>
 		        <g:Button ui:field="clearButton" text="Clear" addStyleNames="btn"/>
 		      </div>
 		    </div>
 		    <div class="span8">
-			    <h3>Items in Shopping Lists</h3>
+			    <h3><g:Label ui:field="shoppingListText"/></h3>
 			    <table>
 			      <tr>
 			        <td

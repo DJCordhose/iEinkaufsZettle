@@ -39,6 +39,8 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -47,6 +49,7 @@ import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
+import eu.zeigermann.gwt.demo.shared.dto.ShopDto;
 
 public class DefaultItemView extends Composite implements ItemView {
 
@@ -72,6 +75,12 @@ public class DefaultItemView extends Composite implements ItemView {
 	@UiField
 	Button clearButton;
 
+	@UiField
+	Label shoppingListText;
+	
+	@UiField
+	ListBox shopList;
+	
 	private ItemView.ViewHandler presenter;
 
 	private Mode mode;
@@ -93,6 +102,8 @@ public class DefaultItemView extends Composite implements ItemView {
 		pager.setDisplay(cellTable);
 		Binder uiBinder = GWT.create(Binder.class);
 		Widget widget = uiBinder.createAndBindUi(this);
+
+		shoppingListText.setText("Items in Shopping List");
 
 		return widget;
 	}
@@ -217,7 +228,7 @@ public class DefaultItemView extends Composite implements ItemView {
 			}
 		};
 		nameColumn.setSortable(true);
-		nameColumn.setDataStoreName("item");
+		nameColumn.setDataStoreName("name");
 		cellTable.addColumn(nameColumn, "Name");
 		cellTable.setColumnWidth(nameColumn, 500, Style.Unit.PX);
 
@@ -268,6 +279,29 @@ public class DefaultItemView extends Composite implements ItemView {
 	@Override
 	public ColumnSortList getTableColumnSortList() {
 		return cellTable.getColumnSortList();
+	}
+
+	@Override
+	public void setListName(String name) {
+		// XXX Label is rendered in a div which forces a line break which we do not like, add prefix into label to fix it
+		shoppingListText.setText("Items in Shopping List: "+name);
+	}
+
+	@Override
+	public int getShopId() {
+		int index = shopList.getSelectedIndex();
+		if (index == -1) {
+			return -1;
+		} else {
+			String value = shopList.getValue(index);
+			return Integer.parseInt(value);
+		}
+	}
+	
+	public void setShops(List<ShopDto> shops) {
+		for (ShopDto shopDto : shops) {
+			shopList.addItem(shopDto.name, "" + shopDto.id);
+		}
 	}
 
 }

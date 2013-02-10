@@ -65,6 +65,11 @@ public class WrapDetachService {
 		return dto;
 	}
 
+	public Item unwrap(ItemDto dto) {
+		Item item = mapper.map(dto, Item.class);
+		return item;
+	}
+
 	public List<ShoppingList> detach(List<ShoppingList> all) {
 		return detachList(all);
 	}

@@ -20,4 +20,9 @@ public interface ShoppingBoundaryDto extends RemoteService {
 
 	int getItemCount(int listId);
 
+	ShoppingListDto getList(int listId);
+	
+	void addItem(ItemDto dto);
+
+
 }

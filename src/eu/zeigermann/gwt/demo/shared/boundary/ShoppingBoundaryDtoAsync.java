@@ -19,4 +19,8 @@ public interface ShoppingBoundaryDtoAsync {
 
 	void getItemCount(int listId, AsyncCallback<Integer> callback);
 
+	void getList(int listId, AsyncCallback<ShoppingListDto> callback);
+
+	void addItem(ItemDto dto, AsyncCallback<Void> callback);
+
 }

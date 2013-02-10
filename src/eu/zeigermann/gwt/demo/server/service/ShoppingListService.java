@@ -12,7 +12,9 @@ import javax.persistence.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.entity.Item;
+import eu.zeigermann.gwt.demo.shared.entity.Shop;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 @Named
@@ -85,8 +87,27 @@ public class ShoppingListService {
 		}
 
 		Query query = em.createQuery(queryString, Item.class);
+		query.setMaxResults(length);
+		query.setFirstResult(start);
 		query.setParameter("list", list);
 		return query.getResultList();
+	}
+
+	public Item createItem(ItemDto dto) {
+		Item item = new Item();
+		item.setName(dto.name);
+		item.setChecked(dto.checked);
+		if (dto.shopId != -1) {
+			Shop shop = findShop(dto.shopId);
+			item.setShop(shop);
+		}
+		ShoppingList list = find(dto.listId);
+		list.addItem(item);
+		return item;
+	}
+
+	private Shop findShop(int shopId) {
+		return em.find(Shop.class, shopId);
 	}
 
 }

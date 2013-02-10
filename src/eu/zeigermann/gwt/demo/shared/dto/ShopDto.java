@@ -2,5 +2,5 @@ package eu.zeigermann.gwt.demo.shared.dto;
 
 
 @SuppressWarnings("serial")
-public class ShoppingListDto extends AbstractBaseDto {
+public class ShopDto extends AbstractBaseDto {
 }

@@ -19,6 +19,7 @@ import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
+import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler {
@@ -53,7 +54,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 		return dataProvider;
 	}
 
-	public void editList(ItemDto item) {
+	public void editItem(ItemDto item) {
 		this.currentItem = item;
 		view.edit(item);
 	}
@@ -77,6 +78,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 	@Override
 	public void init() {
+		// init count
 		service.getItemCount(currentListId, new AsyncCallback<Integer>() {
 
 			@Override
@@ -89,6 +91,20 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 				view.setTableRowCount(rows);
 			}
 		});
+		// init name of list
+		service.getList(currentListId, new AsyncCallback<ShoppingListDto>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+
+			@Override
+			public void onSuccess(ShoppingListDto list) {
+				view.setListName(list.getName());
+			}
+		});
+		
 	}
 
 	@Override
@@ -140,9 +156,21 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	}
 
 	@Override
-	public void create(String text) {
-		// TODO Auto-generated method stub
+	public void create(String name) {
+		ItemDto itemDto = new ItemDto(name);
+		itemDto.listId = currentListId;
+		itemDto.shopId = view.getShopId();
+		service.addItem(itemDto, new AsyncCallback<Void>() {
 
+			@Override
+			public void onSuccess(Void v) {
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+		});
 	}
 
 	@Override

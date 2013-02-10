@@ -25,7 +25,14 @@ public class Item extends AbstractShoppingEntity {
 
 	@ManyToOne
 	Shop shop;
+
+	public Item() {
+	}
 	
+	public Item(String name) {
+		this.name = name;
+	}
+
 	public boolean isChecked() {
 		return checked;
 	}

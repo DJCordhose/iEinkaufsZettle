@@ -1,22 +1,35 @@
 package eu.zeigermann.gwt.demo.shared.dto;
 
-import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class ItemDto implements Serializable {
-	public int id;
-	public String name;
+public class ItemDto extends AbstractBaseDto {
 	public boolean checked;
-	public int version;
+	public int listId;
+	public int shopId;
 
 	// getters / setters to make Dozer happy
 	
-	public int getId() {
-		return id;
+	public int getListId() {
+		return listId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setListId(int listId) {
+		this.listId = listId;
+	}
+
+	public int getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(int shopId) {
+		this.shopId = shopId;
+	}
+
+	public ItemDto() {
+	}
+	
+	public ItemDto(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
@@ -33,14 +46,6 @@ public class ItemDto implements Serializable {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
 	}
 
 }

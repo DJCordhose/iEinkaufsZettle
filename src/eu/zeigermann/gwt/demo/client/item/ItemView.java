@@ -15,9 +15,10 @@ public interface ItemView {
 		void loadData(Range range, ColumnSortList sortList);
 		void delete(ItemDto item);
 		void save(String text);
-		void create(String text);
 		void edit(ItemDto item);
+		void create(String name);
 	}
+	void setListName(String name);
 	void edit(ItemDto item);
 	void setViewHandler(ViewHandler handler);
 	Widget asWidget();
@@ -25,4 +26,5 @@ public interface ItemView {
 	void setTableRowCount(int rows);
 	ColumnSortList getTableColumnSortList();
 	void setDataProvider(AsyncDataProvider<ItemDto> dataProvider);
+	int getShopId();
 }
