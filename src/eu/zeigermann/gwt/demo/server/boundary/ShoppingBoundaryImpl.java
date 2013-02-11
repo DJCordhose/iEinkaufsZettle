@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import eu.zeigermann.gwt.demo.server.service.ShoppingListService;
 import eu.zeigermann.gwt.demo.server.service.WrapDetachService;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
+import eu.zeigermann.gwt.demo.shared.entity.Shop;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 @SuppressWarnings("serial")
@@ -45,5 +46,29 @@ public class ShoppingBoundaryImpl extends AbstractSpringBoundary
 		ShoppingList saved = listService.save(list);
 		ShoppingList detached = wrapDetachService.detach(saved);
 		return detached;
+	}
+
+	@Override
+	public void delete(Shop list) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Shop createShop(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Shop> getAllShops() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Shop save(Shop currentEntity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

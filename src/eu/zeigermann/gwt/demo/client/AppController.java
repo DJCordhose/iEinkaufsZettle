@@ -16,6 +16,9 @@ import eu.zeigermann.gwt.demo.client.item.ItemView;
 import eu.zeigermann.gwt.demo.client.list.DefaultShoppingListView;
 import eu.zeigermann.gwt.demo.client.list.ShoppingListPresenter;
 import eu.zeigermann.gwt.demo.client.list.ShoppingListView;
+import eu.zeigermann.gwt.demo.client.shop.DefaultShopView;
+import eu.zeigermann.gwt.demo.client.shop.ShopPresenter;
+import eu.zeigermann.gwt.demo.client.shop.ShopView;
 
 public class AppController implements ValueChangeHandler<String> {
 	private final HandlerManager eventBus;
@@ -60,6 +63,27 @@ public class AppController implements ValueChangeHandler<String> {
 		});
 	}
 
+	private void doEditShops(boolean createHistory) {
+		if (createHistory) {
+			History.newItem("editShops", false);
+		}
+		GWT.runAsync(ShopPresenter.class, new RunAsyncCallback() {
+
+			@Override
+			public void onSuccess() {
+				ShopView view = new DefaultShopView();
+				ShopPresenter presenter = new ShopPresenter(view, eventBus);
+				presenter.go(container);
+			}
+
+			@Override
+			public void onFailure(Throwable reason) {
+				GWT.log("Loading of module" + ShopPresenter.class
+						+ " failed for reason: " + reason);
+			}
+		});
+	}
+
 	private void doEditItems(final int listId, boolean createHistory) {
 		if (createHistory) {
 			History.newItem("editList:" + listId, false);
@@ -96,8 +120,10 @@ public class AppController implements ValueChangeHandler<String> {
 		String token = event.getValue();
 
 		if (token != null) {
-			if (token.equals("editLists")) {
+			if (token.equalsIgnoreCase("editLists")) {
 				doEditLists(false);
+			} else if (token.equalsIgnoreCase("editShops")) {
+				doEditShops(false);
 			} else if (token.startsWith("editList:")) {
 				String[] split = token.split(":");
 				if (split.length >= 2) {
