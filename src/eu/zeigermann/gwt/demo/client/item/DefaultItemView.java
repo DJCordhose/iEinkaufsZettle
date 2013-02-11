@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -40,7 +41,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,8 +50,6 @@ import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
-import com.google.gwt.cell.client.CheckboxCell;
-
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.entity.Shop;
@@ -80,17 +79,17 @@ public class DefaultItemView extends Composite implements ItemView {
 	Button clearButton;
 
 	@UiField
-	Label shoppingListText;
-	
+	InlineLabel shoppingListText;
+
 	@UiField
 	ListBox shopList;
-	
+
 	private ItemView.ViewHandler presenter;
 
 	private Mode mode;
-	
+
 	private AsyncDataProvider<ItemDto> dataProvider;
-	
+
 	@Override
 	public void setDataProvider(AsyncDataProvider<ItemDto> dataProvider) {
 		this.dataProvider = dataProvider;
@@ -109,8 +108,6 @@ public class DefaultItemView extends Composite implements ItemView {
 		pager.setDisplay(cellTable);
 		Binder uiBinder = GWT.create(Binder.class);
 		Widget widget = uiBinder.createAndBindUi(this);
-
-		shoppingListText.setText("Items in Shopping List");
 
 		return widget;
 	}
@@ -189,7 +186,7 @@ public class DefaultItemView extends Composite implements ItemView {
 		cellTable = new CellTable<ItemDto>(keyProvider);
 		dataProvider.addDataDisplay(cellTable);
 		cellTable.setPageSize(5);
-		
+
 		cellTable.sinkEvents(Event.ONDBLCLICK);
 		final MultiSelectionModel<ItemDto> selectionModel = new MultiSelectionModel<ItemDto>(
 				keyProvider);
@@ -263,7 +260,7 @@ public class DefaultItemView extends Composite implements ItemView {
 		cellTable.addColumn(nameColumn, "Name");
 		cellTable.setColumnWidth(nameColumn, 500, Style.Unit.PX);
 	}
-	
+
 	private void addCheckedColumn() {
 		Column<ItemDto, Boolean> checkedColumn = new Column<ItemDto, Boolean>(
 				new CheckboxCell()) {
@@ -279,7 +276,7 @@ public class DefaultItemView extends Composite implements ItemView {
 				presenter.check(object, value);
 			}
 		});
-		
+
 		cellTable.addColumn(checkedColumn,
 				SafeHtmlUtils.fromSafeConstant("Checked"));
 	}
@@ -330,8 +327,7 @@ public class DefaultItemView extends Composite implements ItemView {
 
 	@Override
 	public void setListName(String name) {
-		// XXX Label is rendered in a div which forces a line break which we do not like, add prefix into label to fix it
-		shoppingListText.setText("Items in Shopping List: "+name);
+		shoppingListText.setText(name);
 	}
 
 	@Override
@@ -344,7 +340,7 @@ public class DefaultItemView extends Composite implements ItemView {
 			return Integer.parseInt(value);
 		}
 	}
-	
+
 	@Override
 	public void setShops(List<Shop> shops) {
 		for (Shop shop : shops) {

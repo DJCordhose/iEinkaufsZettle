@@ -35,7 +35,7 @@
 		      </div>
 		    </div>
 		    <div class="span8">
-			    <h3><g:Label ui:field="shoppingListText"/></h3>
+			    <h3>Items in Shopping List: <g:InlineLabel ui:field="shoppingListText"/></h3>
 			    <table>
 			      <tr>
 			        <td

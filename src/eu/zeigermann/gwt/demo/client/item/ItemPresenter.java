@@ -229,6 +229,21 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 		});
 	}
 
+	public void move(ItemDto toMove, ItemDto toPosition) {
+		service.insertItemAfter(toMove, toPosition, new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				refresh();
+			}
+		});
+	}
+	
 	@Override
 	public void edit(ItemDto item) {
 		this.currentItem = item;

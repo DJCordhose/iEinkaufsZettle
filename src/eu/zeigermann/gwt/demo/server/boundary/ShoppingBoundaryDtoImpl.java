@@ -81,13 +81,15 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 
 	@Override
 	public void insertItemAfter(ItemDto itemToInsert, ItemDto itemPosition) {
-		// TODO Auto-generated method stub
-		
+		Item newItem = wrapDetachService.unwrap(itemToInsert);
+		Item position = wrapDetachService.unwrap(itemPosition);
+		service.moveItem(newItem, position, true);
 	}
 
 	@Override
 	public void insertItemBefore(ItemDto itemToInsert, ItemDto itemPosition) {
-		// TODO Auto-generated method stub
-		
+		Item newItem = wrapDetachService.unwrap(itemToInsert);
+		Item position = wrapDetachService.unwrap(itemPosition);
+		service.moveItem(newItem, position, false);
 	}
 }

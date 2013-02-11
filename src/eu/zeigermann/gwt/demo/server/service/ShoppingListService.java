@@ -130,4 +130,15 @@ public class ShoppingListService {
 		return shop;
 	}
 
+	public void moveItem(Item itemToMove, Item position, boolean after) {
+		position = em.merge(position);
+		itemToMove = em.merge(itemToMove);
+		ShoppingList list = position.getList();
+		List<Item> items = list.getItems();
+		items.remove(itemToMove);
+		int index = items.indexOf(position);
+		items.add(index + (after ? 1 : 0), itemToMove);
+		list.refreshPositions();
+	}
+
 }
