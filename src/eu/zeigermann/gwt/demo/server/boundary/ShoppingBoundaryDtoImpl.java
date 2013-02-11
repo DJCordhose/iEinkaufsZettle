@@ -66,4 +66,28 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 	public void addItem(ItemDto dto) {
 		service.createItem(dto);
 	}
+
+	@Override
+	public void saveItem(ItemDto dto) {
+		Item item = wrapDetachService.unwrap(dto);
+		service.save(item);
+	}
+
+	@Override
+	public void delete(ItemDto dto) {
+		Item item = wrapDetachService.unwrap(dto);
+		service.delete(item);
+	}
+
+	@Override
+	public void insertItemAfter(ItemDto itemToInsert, ItemDto itemPosition) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertItemBefore(ItemDto itemToInsert, ItemDto itemPosition) {
+		// TODO Auto-generated method stub
+		
+	}
 }

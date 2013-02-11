@@ -150,14 +150,39 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 	@Override
 	public void delete(ItemDto item) {
-		// TODO Auto-generated method stub
+		service.delete(item, new AsyncCallback<Void>() {
 
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				refresh();
+			}
+		});
 	}
 
 	@Override
-	public void save(String text) {
-		// TODO Auto-generated method stub
+	public void save(String name) {
+		if (currentItem == null) {
+			throw new IllegalStateException(
+					"Can not save without item being edited");
+		}
+		currentItem.setName(name);
+		service.saveItem(currentItem, new AsyncCallback<Void>() {
 
+			@Override
+			public void onSuccess(Void v) {
+				refresh();
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+		});
 	}
 
 	@Override
@@ -169,8 +194,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 			@Override
 			public void onSuccess(Void v) {
-				view.refresh();
-				updateRowCount();
+				refresh();
 			}
 
 			@Override
@@ -182,8 +206,13 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 	@Override
 	public void edit(ItemDto item) {
-		// TODO Auto-generated method stub
+		this.currentItem = item;
+		view.edit(item);
+	}
 
+	private void refresh() {
+		view.refresh();
+		updateRowCount();
 	}
 
 }

@@ -1,0 +1,1 @@
+java -jar war/WEB-INF/lib/h2*.jar

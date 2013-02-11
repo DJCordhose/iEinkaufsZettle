@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
+import eu.zeigermann.gwt.demo.shared.entity.AbstractShoppingEntity;
 import eu.zeigermann.gwt.demo.shared.entity.Item;
 import eu.zeigermann.gwt.demo.shared.entity.Shop;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
@@ -30,19 +31,6 @@ public class ShoppingListService {
 		ShoppingList list = new ShoppingList();
 		em.persist(list);
 		return list;
-	}
-
-	public ShoppingList save(ShoppingList list) {
-		if (list.getId() == 0) {
-			em.persist(list);
-			return list;
-		} else {
-			return em.merge(list);
-		}
-	}
-
-	public void delete(ShoppingList list) {
-		em.remove(em.merge(list));
 	}
 
 	public ShoppingList find(int id) {
@@ -101,9 +89,23 @@ public class ShoppingListService {
 			Shop shop = findShop(dto.shopId);
 			item.setShop(shop);
 		}
+		em.persist(item);
 		ShoppingList list = find(dto.listId);
 		list.addItem(item);
 		return item;
+	}
+
+	public <E extends AbstractShoppingEntity> E save(E entity) {
+		if (entity.getId() == 0) {
+			em.persist(entity);
+			return entity;
+		} else {
+			return em.merge(entity);
+		}
+	}
+
+	public <E extends AbstractShoppingEntity> void delete(E entity) {
+		em.remove(em.merge(entity));
 	}
 
 	private Shop findShop(int shopId) {

@@ -24,5 +24,12 @@ public interface ShoppingBoundaryDto extends RemoteService {
 	
 	void addItem(ItemDto dto);
 
+	void saveItem(ItemDto item);
+
+	void delete(ItemDto item);
+	
+	void insertItemAfter(ItemDto itemToInsert, ItemDto itemPosition);
+
+	void insertItemBefore(ItemDto itemToInsert, ItemDto itemPosition);
 
 }

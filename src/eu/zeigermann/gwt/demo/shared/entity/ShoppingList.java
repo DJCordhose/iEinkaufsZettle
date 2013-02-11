@@ -22,6 +22,7 @@ public class ShoppingList extends AbstractShoppingEntity {
 	public final static String TABLE = "ShoppingList";
 	public final static String QUERY_ALL = TABLE + ".all";
 
+	// http://stackoverflow.com/questions/6763329/ordercolumn-onetomany-null-index-column-for-collection
 	@OneToMany(mappedBy = "list", cascade = CascadeType.ALL)
 	@OrderColumn
 	List<Item> items = new ArrayList<Item>();

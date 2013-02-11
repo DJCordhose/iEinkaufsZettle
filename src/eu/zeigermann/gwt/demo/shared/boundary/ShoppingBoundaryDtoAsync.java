@@ -23,4 +23,14 @@ public interface ShoppingBoundaryDtoAsync {
 
 	void addItem(ItemDto dto, AsyncCallback<Void> callback);
 
+	void saveItem(ItemDto item, AsyncCallback<Void> asyncCallback);
+
+	void delete(ItemDto item, AsyncCallback<Void> asyncCallback);
+
+	void insertItemAfter(ItemDto itemToInsert, ItemDto itemPosition,
+			AsyncCallback<Void> callback);
+
+	void insertItemBefore(ItemDto itemToInsert, ItemDto itemPosition,
+			AsyncCallback<Void> callback);
+
 }
