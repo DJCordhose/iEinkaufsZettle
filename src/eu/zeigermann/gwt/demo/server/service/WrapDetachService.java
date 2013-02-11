@@ -9,8 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.dozer.Mapper;
-import org.hibernate.LockMode;
-import org.hibernate.Session;
+//import org.hibernate.LockMode;
+//import org.hibernate.Session;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
