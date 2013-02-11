@@ -47,6 +47,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShopDto;
@@ -84,9 +85,12 @@ public class DefaultItemView extends Composite implements ItemView {
 	private ItemView.ViewHandler presenter;
 
 	private Mode mode;
-
+	
+	private AsyncDataProvider<ItemDto> dataProvider;
+	
 	@Override
 	public void setDataProvider(AsyncDataProvider<ItemDto> dataProvider) {
+		this.dataProvider = dataProvider;
 		initWidget(createWidget(dataProvider));
 		setMode(Mode.CREATE);
 	}
@@ -302,6 +306,13 @@ public class DefaultItemView extends Composite implements ItemView {
 		for (ShopDto shopDto : shops) {
 			shopList.addItem(shopDto.name, "" + shopDto.id);
 		}
+	}
+
+	@Override
+	public void refresh() {
+		ColumnSortList columnSortList = cellTable.getColumnSortList();
+		Range visibleRange = cellTable.getVisibleRange();
+		presenter.loadData(visibleRange, columnSortList);
 	}
 
 }

@@ -27,4 +27,5 @@ public interface ItemView {
 	ColumnSortList getTableColumnSortList();
 	void setDataProvider(AsyncDataProvider<ItemDto> dataProvider);
 	int getShopId();
+	void refresh();
 }

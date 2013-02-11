@@ -78,20 +78,11 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 	@Override
 	public void init() {
-		// init count
-		service.getItemCount(currentListId, new AsyncCallback<Integer>() {
+		updateRowCount();
+		updateListName();
+	}
 
-			@Override
-			public void onFailure(Throwable caught) {
-				GWT.log("Error: " + caught);
-			}
-
-			@Override
-			public void onSuccess(Integer rows) {
-				view.setTableRowCount(rows);
-			}
-		});
-		// init name of list
+	public void updateListName() {
 		service.getList(currentListId, new AsyncCallback<ShoppingListDto>() {
 
 			@Override
@@ -104,7 +95,21 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 				view.setListName(list.getName());
 			}
 		});
-		
+	}
+
+	public void updateRowCount() {
+		service.getItemCount(currentListId, new AsyncCallback<Integer>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+
+			@Override
+			public void onSuccess(Integer rows) {
+				view.setTableRowCount(rows);
+			}
+		});
 	}
 
 	@Override
@@ -164,6 +169,8 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 			@Override
 			public void onSuccess(Void v) {
+				view.refresh();
+				updateRowCount();
 			}
 
 			@Override
