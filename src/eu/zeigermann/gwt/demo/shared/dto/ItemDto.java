@@ -4,8 +4,10 @@ package eu.zeigermann.gwt.demo.shared.dto;
 @SuppressWarnings("serial")
 public class ItemDto extends AbstractBaseDto {
 	public boolean checked;
-	public int listId;
-	public int shopId;
+	public int listId = -1;
+	public int shopId = -1;
+	public String shopName;
+	public int position = -1;
 
 	// getters / setters to make Dozer happy
 	
@@ -46,6 +48,22 @@ public class ItemDto extends AbstractBaseDto {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 }

@@ -25,6 +25,8 @@ public class Item extends AbstractShoppingEntity {
 
 	@ManyToOne
 	Shop shop;
+	
+	int position;
 
 	public Item() {
 	}
@@ -55,6 +57,14 @@ public class Item extends AbstractShoppingEntity {
 
 	public void setShop(Shop shop) {
 		this.shop = shop;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 }

@@ -16,11 +16,11 @@
 	  <div class="container">
 		  <div class="row">
 		    <div class="span4">
-		      <h3>Shopping List</h3>
+		      <h3>Shops</h3>
 		      <div class="well form-horizontal" >
 	            <div class="control-group">
 		            <label>
-		                <span>Name of List</span>
+		                <span>Name of Shop</span>
 		            </label>
 			       <g:TextBox ui:field="nameTextBox" />
 	            </div>
@@ -29,7 +29,7 @@
 		      </div>
 		    </div>
 		    <div class="span8">
-			    <h3>Shopping Lists</h3>
+			    <h3>Shops</h3>
 			    <table>
 			      <tr>
 			        <td

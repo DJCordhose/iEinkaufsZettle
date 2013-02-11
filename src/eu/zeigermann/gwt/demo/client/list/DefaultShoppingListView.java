@@ -174,7 +174,8 @@ public class DefaultShoppingListView extends Composite implements ShoppingListVi
 		cellTable = new CellTable<ShoppingList>(keyProvider);
 		dataProvider.addDataDisplay(cellTable);
 		cellTable.setPageSize(5);
-
+		
+		cellTable.sinkEvents(Event.ONDBLCLICK);
 		final MultiSelectionModel<ShoppingList> selectionModel = new MultiSelectionModel<ShoppingList>(
 				keyProvider);
 		cellTable.setSelectionModel(selectionModel,
@@ -184,9 +185,9 @@ public class DefaultShoppingListView extends Composite implements ShoppingListVi
 					public void onCellPreview(
 							CellPreviewEvent<ShoppingList> event) {
 						int eventType = Event.getTypeInt(event.getNativeEvent().getType());
-						if (eventType == Event.ONCLICK) {
+						if (eventType == Event.ONDBLCLICK) {
 							ShoppingList list = event.getValue();
-							presenter.edit(list);
+							presenter.editItems(list);
 						}
 					}
 				});

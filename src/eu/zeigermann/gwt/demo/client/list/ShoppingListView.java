@@ -13,6 +13,7 @@ public interface ShoppingListView {
 		void create(String text);
 		void edit(ShoppingList list);
 		void editItems();
+		void editItems(ShoppingList list);
 	}
 	void edit(ShoppingList list);
 	void setViewHandler(ViewHandler handler);

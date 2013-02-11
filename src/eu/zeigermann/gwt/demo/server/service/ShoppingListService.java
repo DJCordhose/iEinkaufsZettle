@@ -27,18 +27,20 @@ public class ShoppingListService {
 	@PersistenceContext
 	EntityManager em;
 
-	public ShoppingList create() {
+	public ShoppingList createList() {
 		ShoppingList list = new ShoppingList();
 		em.persist(list);
 		return list;
 	}
 
-	public ShoppingList find(int id) {
-		return em.find(ShoppingList.class, id);
+	public ShoppingList findList(int id) {
+		ShoppingList shoppingList = em.find(ShoppingList.class, id);
+		List<Item> items = shoppingList.getItems();
+		return shoppingList;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ShoppingList> getAll() {
+	public List<ShoppingList> getAllLists() {
 		Query query = em.createNamedQuery(ShoppingList.QUERY_ALL);
 		return query.getResultList();
 	}
@@ -55,24 +57,18 @@ public class ShoppingListService {
 			Map<String, Boolean> sortInfo) {
 		// XXX this really is brute force, maybe consider using a criteria query
 		String queryString = "SELECT o from " + Item.TABLE
-				+ " o WHERE o.list = :list";
+				+ " o WHERE o.list = :list" + " ORDER BY ";
 
-		if (sortInfo.size() > 0) {
-			queryString += " ORDER BY ";
-			Set<Entry<String, Boolean>> entries = sortInfo.entrySet();
-			int i = 0;
-			for (Entry<String, Boolean> entry : entries) {
-				queryString += entry.getKey();
-				if (!entry.getValue()) {
-					queryString += " DESC";
-				}
-				i++;
-				if (i < entries.size()) {
-					queryString += ", ";
-				}
+		Set<Entry<String, Boolean>> entries = sortInfo.entrySet();
+		for (Entry<String, Boolean> entry : entries) {
+			queryString += entry.getKey();
+			if (!entry.getValue()) {
+				queryString += " DESC";
 			}
-
+			queryString += ", ";
 		}
+		// always sort by position
+		queryString += "position ASC";
 
 		Query query = em.createQuery(queryString, Item.class);
 		query.setMaxResults(length);
@@ -89,10 +85,16 @@ public class ShoppingListService {
 			Shop shop = findShop(dto.shopId);
 			item.setShop(shop);
 		}
-		em.persist(item);
-		ShoppingList list = find(dto.listId);
+		ShoppingList list = findList(dto.listId);
 		list.addItem(item);
 		return item;
+	}
+
+	public void removeItem(Item item) {
+		item = em.merge(item);
+		ShoppingList list = item.getList();
+		list.getItems().remove(item);
+		em.remove(item);
 	}
 
 	public <E extends AbstractShoppingEntity> E save(E entity) {
@@ -108,8 +110,24 @@ public class ShoppingListService {
 		em.remove(em.merge(entity));
 	}
 
-	private Shop findShop(int shopId) {
+	public Shop findShop(int shopId) {
 		return em.find(Shop.class, shopId);
+	}
+
+	public Item findItem(int itemId) {
+		return em.find(Item.class, itemId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Shop> getAllShops() {
+		Query query = em.createNamedQuery(Shop.QUERY_ALL);
+		return query.getResultList();
+	}
+
+	public Shop createShop() {
+		Shop shop = new Shop();
+		em.persist(shop);
+		return shop;
 	}
 
 }

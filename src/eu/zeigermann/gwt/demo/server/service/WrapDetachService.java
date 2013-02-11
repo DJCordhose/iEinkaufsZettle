@@ -25,6 +25,9 @@ public class WrapDetachService {
 	@Inject
 	private Mapper mapper;
 	
+	@Inject
+	ShoppingListService service;
+	
 	@PersistenceContext
 	EntityManager em;
 
@@ -42,7 +45,7 @@ public class WrapDetachService {
 	}
 
 	// default, Entity geht einfach durch
-	public AbstractShoppingEntity detach(AbstractShoppingEntity entity) {
+	public <E extends AbstractShoppingEntity> E detach(E entity) {
 		return entity;
 	}
 
@@ -62,20 +65,20 @@ public class WrapDetachService {
 
 	public ItemDto wrap(Item item) {
 		ItemDto dto = mapper.map(item, ItemDto.class);
+		dto.shopName = item.getShop().getName();
+		dto.shopId = item.getShop().getId();
+		dto.listId = item.getList().getId();
 		return dto;
 	}
 
 	public Item unwrap(ItemDto dto) {
-		Item item = mapper.map(dto, Item.class);
+		Item item = em.find(Item.class, dto.id);
+		mapper.map(dto, item);
 		return item;
 	}
 
-	public List<ShoppingList> detach(List<ShoppingList> all) {
-		return detachList(all);
-	}
-
 	@SuppressWarnings("unchecked")
-	protected <T extends AbstractShoppingEntity> List<T> detachList(List<T> list) {
+	public <T extends AbstractShoppingEntity> List<T> detach(List<T> list) {
 		List<T> detached = new ArrayList<T>();
 		for (T item : list) {
 			T dto;

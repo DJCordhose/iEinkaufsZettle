@@ -15,60 +15,64 @@ public class ShoppingBoundaryImpl extends AbstractSpringBoundary
 		implements ShoppingBoundary {
 
 	@Inject
-	ShoppingListService listService;
+	ShoppingListService service;
 
 	@Inject
 	WrapDetachService wrapDetachService;
 	
 	@Override
 	public ShoppingList createList(String name) {
-		ShoppingList list = listService.create();
+		ShoppingList list = service.createList();
 		list.setName(name);
-		list = listService.save(list);
+		list = service.save(list);
 		ShoppingList detached = wrapDetachService.detach(list);
 		return detached;
 	}
 	
 	@Override
 	public List<ShoppingList> getAllLists() {
-		List<ShoppingList> all = listService.getAll();
+		List<ShoppingList> all = service.getAllLists();
 		List<ShoppingList> detached = wrapDetachService.detach(all);
 		return detached;
 	}
 
 	@Override
 	public void deleteList(ShoppingList list) {
-		listService.delete(list);
+		service.delete(list);
 	}
 
 	@Override
 	public ShoppingList saveList(ShoppingList list) {
-		ShoppingList saved = listService.save(list);
+		ShoppingList saved = service.save(list);
 		ShoppingList detached = wrapDetachService.detach(saved);
 		return detached;
 	}
 
 	@Override
 	public void delete(Shop list) {
-		// TODO Auto-generated method stub
-		
+		service.delete(list);
 	}
 
 	@Override
 	public Shop createShop(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Shop shop = service.createShop();
+		shop.setName(name);
+		shop = service.save(shop);
+		Shop detached = wrapDetachService.detach(shop);
+		return detached;
 	}
 
 	@Override
 	public List<Shop> getAllShops() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Shop> all = service.getAllShops();
+		List<Shop> detached = wrapDetachService.detach(all);
+		return detached;
 	}
 
 	@Override
-	public Shop save(Shop currentEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	public Shop save(Shop shop) {
+		Shop saved = service.save(shop);
+		Shop detached = wrapDetachService.detach(saved);
+		return detached;
 	}
 }

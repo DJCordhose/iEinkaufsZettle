@@ -1,8 +1,8 @@
 package eu.zeigermann.gwt.demo.client.item;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -16,16 +16,21 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.client.Presenter;
+import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
+import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.Shop;
 
 public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler {
 
 	private ShoppingBoundaryDtoAsync service = GWT
 			.create(ShoppingBoundaryDto.class);
+
+	private ShoppingBoundaryAsync shopService = GWT
+			.create(ShoppingBoundary.class);
 
 	AsyncDataProvider<ItemDto> dataProvider;
 	ItemDto currentItem;
@@ -80,6 +85,22 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	public void init() {
 		updateRowCount();
 		updateListName();
+		initShops();
+	}
+
+	private void initShops() {
+		shopService.getAllShops(new AsyncCallback<List<Shop>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				GWT.log("Error: " + caught);
+			}
+
+			@Override
+			public void onSuccess(List<Shop> shops) {
+				view.setShops(shops);
+			}
+		});
 	}
 
 	public void updateListName() {
@@ -171,7 +192,11 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 					"Can not save without item being edited");
 		}
 		currentItem.setName(name);
-		service.saveItem(currentItem, new AsyncCallback<Void>() {
+		saveItem(currentItem);
+	}
+
+	private void saveItem(ItemDto item) {
+		service.saveItem(item, new AsyncCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void v) {
@@ -213,6 +238,12 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	private void refresh() {
 		view.refresh();
 		updateRowCount();
+	}
+
+	@Override
+	public void check(ItemDto item, Boolean value) {
+		item.setChecked(value);
+		saveItem(item);
 	}
 
 }

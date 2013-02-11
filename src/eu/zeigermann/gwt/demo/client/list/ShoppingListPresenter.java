@@ -154,6 +154,15 @@ public class ShoppingListPresenter implements Presenter<ShoppingListView>, Shopp
 	}
 
 	@Override
+	public void editItems(ShoppingList list) {
+		if (eventBus == null) {
+			throw new IllegalStateException(
+					"No eventsbus set");
+		}
+		eventBus.fireEvent(new EditItemsEvent(list));
+	}
+	
+	@Override
 	public void go(HasWidgets container) {
 		container.clear();
 		if (view == null) {

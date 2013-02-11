@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -48,9 +49,11 @@ import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
+import com.google.gwt.cell.client.CheckboxCell;
+
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
-import eu.zeigermann.gwt.demo.shared.dto.ShopDto;
+import eu.zeigermann.gwt.demo.shared.entity.Shop;
 
 public class DefaultItemView extends Composite implements ItemView {
 
@@ -157,6 +160,11 @@ public class DefaultItemView extends Composite implements ItemView {
 	@Override
 	public void edit(ItemDto item) {
 		nameTextBox.setText(item.getName());
+		for (int i = 0; i < shopList.getItemCount(); i++) {
+			if (shopList.getValue(i).equals("" + item.shopId)) {
+				shopList.setSelectedIndex(i);
+			}
+		}
 		nameTextBox.setFocus(true);
 		setMode(Mode.EDIT);
 	}
@@ -181,7 +189,8 @@ public class DefaultItemView extends Composite implements ItemView {
 		cellTable = new CellTable<ItemDto>(keyProvider);
 		dataProvider.addDataDisplay(cellTable);
 		cellTable.setPageSize(5);
-
+		
+		cellTable.sinkEvents(Event.ONDBLCLICK);
 		final MultiSelectionModel<ItemDto> selectionModel = new MultiSelectionModel<ItemDto>(
 				keyProvider);
 		cellTable.setSelectionModel(selectionModel,
@@ -191,7 +200,7 @@ public class DefaultItemView extends Composite implements ItemView {
 					public void onCellPreview(CellPreviewEvent<ItemDto> event) {
 						int eventType = Event.getTypeInt(event.getNativeEvent()
 								.getType());
-						if (eventType == Event.ONCLICK) {
+						if (eventType == Event.ONDBLCLICK) {
 							ItemDto list = event.getValue();
 							presenter.edit(list);
 						}
@@ -209,7 +218,9 @@ public class DefaultItemView extends Composite implements ItemView {
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 
 		// columns
-		addNameColumn(columnSortHandler);
+		addShopColumn(columnSortHandler);
+		addNameColumn();
+		addCheckedColumn();
 		addEditColumn();
 		addDeleteColumn();
 	}
@@ -224,21 +235,53 @@ public class DefaultItemView extends Composite implements ItemView {
 		cellTable.setRowCount(rows, true);
 	}
 
-	private void addNameColumn(ColumnSortEvent.Handler columnSortHandler) {
-		TextColumn<ItemDto> nameColumn = new TextColumn<ItemDto>() {
+	private void addShopColumn(ColumnSortEvent.Handler columnSortHandler) {
+		TextColumn<ItemDto> shopColumn = new TextColumn<ItemDto>() {
 			@Override
-			public String getValue(ItemDto list) {
-				return list.getName();
+			public String getValue(ItemDto dto) {
+				return dto.shopName;
 			}
 		};
-		nameColumn.setSortable(true);
+		shopColumn.setSortable(true);
+		shopColumn.setDataStoreName("shop.name");
+		cellTable.addColumn(shopColumn, "Shop");
+		cellTable.setColumnWidth(shopColumn, 500, Style.Unit.PX);
+
+		cellTable.addColumnSortHandler(columnSortHandler);
+		cellTable.getColumnSortList().push(shopColumn);
+
+	}
+
+	private void addNameColumn() {
+		TextColumn<ItemDto> nameColumn = new TextColumn<ItemDto>() {
+			@Override
+			public String getValue(ItemDto dto) {
+				return dto.getName();
+			}
+		};
 		nameColumn.setDataStoreName("name");
 		cellTable.addColumn(nameColumn, "Name");
 		cellTable.setColumnWidth(nameColumn, 500, Style.Unit.PX);
+	}
+	
+	private void addCheckedColumn() {
+		Column<ItemDto, Boolean> checkedColumn = new Column<ItemDto, Boolean>(
+				new CheckboxCell()) {
+			@Override
+			public Boolean getValue(ItemDto object) {
+				return object.isChecked();
+			}
+		};
+		checkedColumn.setFieldUpdater(new FieldUpdater<ItemDto, Boolean>() {
 
-		cellTable.addColumnSortHandler(columnSortHandler);
-		cellTable.getColumnSortList().push(nameColumn);
-
+			@Override
+			public void update(int index, ItemDto object, Boolean value) {
+				presenter.check(object, value);
+			}
+		});
+		
+		cellTable.addColumn(checkedColumn,
+				SafeHtmlUtils.fromSafeConstant("Checked"));
 	}
 
 	private void addEditColumn() {
@@ -302,9 +345,10 @@ public class DefaultItemView extends Composite implements ItemView {
 		}
 	}
 	
-	public void setShops(List<ShopDto> shops) {
-		for (ShopDto shopDto : shops) {
-			shopList.addItem(shopDto.name, "" + shopDto.id);
+	@Override
+	public void setShops(List<Shop> shops) {
+		for (Shop shop : shops) {
+			shopList.addItem(shop.getName(), "" + shop.getId());
 		}
 	}
 

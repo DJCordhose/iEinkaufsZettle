@@ -25,14 +25,14 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 
 	@Override
 	public ShoppingListDto getList(int listId) {
-		ShoppingList list = service.find(listId);
+		ShoppingList list = service.findList(listId);
 		ShoppingListDto dto = wrapDetachService.wrap(list);
 		return dto;
 	}
 	
 	@Override
 	public ShoppingListDto createList(String name) {
-		ShoppingList list = service.create();
+		ShoppingList list = service.createList();
 		list.setName(name);
 		list = service.save(list);
 		ShoppingListDto dto = wrapDetachService.wrap(list);
@@ -41,7 +41,7 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 
 	@Override
 	public List<ItemDto> getItems(ShoppingListDto listDto) {
-		ShoppingList list = service.find(listDto.id);
+		ShoppingList list = service.findList(listDto.id);
 		List<Item> items = list.getItems();
 		List<ItemDto> dto = wrapDetachService.wrap(items);
 		return dto;
@@ -50,7 +50,7 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 	@Override
 	public List<ItemDto> getItems(int listId, int start, int length,
 			Map<String, Boolean> sortInfo) {
-		ShoppingList list = service.find(listId);
+		ShoppingList list = service.findList(listId);
 		List<Item> items = service.getItems(list, start, length, sortInfo);
 		List<ItemDto> dto = wrapDetachService.wrap(items);
 		return dto;
@@ -58,7 +58,7 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 
 	@Override
 	public int getItemCount(int listId) {
-		ShoppingList list = service.find(listId);
+		ShoppingList list = service.findList(listId);
 		return service.countItems(list);
 	}
 
@@ -76,7 +76,7 @@ public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary
 	@Override
 	public void delete(ItemDto dto) {
 		Item item = wrapDetachService.unwrap(dto);
-		service.delete(item);
+		service.removeItem(item);
 	}
 
 	@Override

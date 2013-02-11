@@ -8,6 +8,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
+import eu.zeigermann.gwt.demo.shared.entity.Shop;
 
 public interface ItemView {
 	public interface ViewHandler {
@@ -17,6 +18,7 @@ public interface ItemView {
 		void save(String text);
 		void edit(ItemDto item);
 		void create(String name);
+		void check(ItemDto item, Boolean value);
 	}
 	void setListName(String name);
 	void edit(ItemDto item);
@@ -28,4 +30,5 @@ public interface ItemView {
 	void setDataProvider(AsyncDataProvider<ItemDto> dataProvider);
 	int getShopId();
 	void refresh();
+	void setShops(List<Shop> shops);
 }
