@@ -41,26 +41,32 @@ public class DefaultStatisticsView extends Composite implements StatisticsView {
 	@Override
 	public void show(Map<String, Integer> stats) {
 		FlotData data = FlotData.getInstance(stats);
-		Flot.renderAsPie(widget.getElement().getFirstChildElement(), data, new FlotHoverHandler() {
+		show(data);
+	}
 
-			@Override
-			public void onHovered(FlotPosition pos, FlotItem item) {
-				String color = item.getColor();
-				String itemLabel = item.getLabel();
-				int percent = item.getPercent();
-				label.getElement().setInnerHTML(
-						"<span style=\"font-weight: bold; color: "
-								+ color + "\">" + itemLabel
-								+ " (" + percent + "%)</span>");
-			}
-		}, new FlotClickHandler() {
+	@Override
+	public void show(FlotData data) {
+		Flot.renderAsPie(widget.getElement().getFirstChildElement(), data,
+				new FlotHoverHandler() {
 
-			@Override
-			public void onClicked(FlotPosition pos, FlotItem item) {
-				String itemLabel = item.getLabel();
-				presenter.click(itemLabel);
-			}
-		});
+					@Override
+					public void onHovered(FlotPosition pos, FlotItem item) {
+						String color = item.getColor();
+						String itemLabel = item.getLabel();
+						int percent = item.getPercent();
+						label.getElement().setInnerHTML(
+								"<span style=\"font-weight: bold; color: "
+										+ color + "\">" + itemLabel + " ("
+										+ percent + "%)</span>");
+					}
+				}, new FlotClickHandler() {
+
+					@Override
+					public void onClicked(FlotPosition pos, FlotItem item) {
+						String itemLabel = item.getLabel();
+						presenter.click(itemLabel);
+					}
+				});
 	}
 
 }

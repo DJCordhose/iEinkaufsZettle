@@ -6,8 +6,8 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN"
   "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to='zettle'>
-  <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.http.HTTP" />
   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"/>
     <script src="flot-0.7/jquery.flot.js"/>

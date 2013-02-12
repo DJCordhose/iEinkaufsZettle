@@ -28,6 +28,11 @@
     <servlet-class>eu.zeigermann.gwt.demo.server.boundary.ShoppingBoundaryDtoImpl</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>statisticsRestEndpoint</servlet-name>
+    <servlet-class>eu.zeigermann.gwt.demo.server.boundary.StatisticsRestEndpoint</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>listServlet</servlet-name>
     <url-pattern>zettle/list</url-pattern>
@@ -36,6 +41,11 @@
   <servlet-mapping>
     <servlet-name>listDtoServlet</servlet-name>
     <url-pattern>zettle/dto</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>statisticsRestEndpoint</servlet-name>
+    <url-pattern>zettle/statisticsrs/*</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

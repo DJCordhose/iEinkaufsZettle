@@ -19,7 +19,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-annotations-2.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-core-2.1.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-databind-2.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-databind-2.1.1.jar" sourcepath="/Users/olli/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.1.1/jackson-databind-2.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.inject-1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.4.jar"/>

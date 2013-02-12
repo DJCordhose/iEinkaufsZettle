@@ -24,6 +24,8 @@
 	</bean>
 
 	<bean id="mapper" class="org.dozer.DozerBeanMapper" />
+
+	<bean id="jsonMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
 	
 	<tx:annotation-driven />
 </beans>
