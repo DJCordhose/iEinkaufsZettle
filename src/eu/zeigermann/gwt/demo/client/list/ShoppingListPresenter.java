@@ -10,25 +10,19 @@ import com.google.gwt.view.client.ListDataProvider;
 
 import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
-import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
 import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
 
 public class ShoppingListPresenter implements Presenter<ShoppingListView>, ShoppingListView.ViewHandler {
-
-	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
-	private ShoppingBoundaryDtoAsync dtoService = GWT
-			.create(ShoppingBoundaryDto.class);
 
 	ListDataProvider<ShoppingList> dataProvider = new ListDataProvider<ShoppingList>();
 	ShoppingList currentList;
 	final ShoppingListView view;
 	final HandlerManager eventBus;
+	final ShoppingBoundaryAsync service;
 	
-	public ShoppingListPresenter(ShoppingListView view, HandlerManager eventBus) {
+	public ShoppingListPresenter(ShoppingBoundaryAsync service, ShoppingListView view, HandlerManager eventBus) {
+		this.service = service;
 		this.view = view;
 		view.setViewHandler(this);
 		view.setDataProvider(dataProvider);
@@ -82,21 +76,6 @@ public class ShoppingListPresenter implements Presenter<ShoppingListView>, Shopp
 			@Override
 			public void onSuccess(ShoppingList list) {
 				dataProvider.getList().add(list);
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				GWT.log("Error: " + caught);
-			}
-		});
-	}
-
-	public void createListAsDto(String name) {
-		dtoService.createList(name, new AsyncCallback<ShoppingListDto>() {
-
-			@Override
-			public void onSuccess(ShoppingListDto list) {
-				// dataProvider.getList().add(list);
 			}
 
 			@Override

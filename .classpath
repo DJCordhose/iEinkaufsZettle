@@ -37,5 +37,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-tx-3.2.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-web-3.2.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/easymock-2.5.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

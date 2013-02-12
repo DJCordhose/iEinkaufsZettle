@@ -9,25 +9,20 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.view.client.ListDataProvider;
 
 import eu.zeigermann.gwt.demo.client.Presenter;
-import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
-import eu.zeigermann.gwt.demo.shared.dto.ShopDto;
 import eu.zeigermann.gwt.demo.shared.entity.Shop;
 
 public class ShopPresenter implements Presenter<ShopView>, ShopView.ViewHandler {
-
-	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
 
 	ListDataProvider<Shop> dataProvider = new ListDataProvider<Shop>();
 	Shop currentEntity;
 	final String requestedShopName;
 	final ShopView view;
 	final HandlerManager eventBus;
+	final ShoppingBoundaryAsync service;
 	
-	public ShopPresenter(String requestedShopName, ShopView view, HandlerManager eventBus) {
+	public ShopPresenter(ShoppingBoundaryAsync service, String requestedShopName, ShopView view, HandlerManager eventBus) {
+		this.service = service;
 		this.requestedShopName = requestedShopName;
 		this.view = view;
 		view.setViewHandler(this);

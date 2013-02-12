@@ -24,10 +24,17 @@ import eu.zeigermann.gwt.demo.client.shop.ShopView;
 import eu.zeigermann.gwt.demo.client.statistics.DefaultStatisticsView;
 import eu.zeigermann.gwt.demo.client.statistics.StatisticsPresenter;
 import eu.zeigermann.gwt.demo.client.statistics.StatisticsView;
+import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
+import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
+import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
+import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 
 public class AppController implements ValueChangeHandler<String> {
 	private final HandlerManager eventBus;
 	private HasWidgets container;
+	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
+	private ShoppingBoundaryDtoAsync dtoService = GWT
+			.create(ShoppingBoundaryDto.class);
 
 	public AppController(HandlerManager eventBus) {
 		this.eventBus = eventBus;
@@ -62,8 +69,8 @@ public class AppController implements ValueChangeHandler<String> {
 			@Override
 			public void onSuccess() {
 				StatisticsView view = new DefaultStatisticsView();
-				StatisticsPresenter presenter = new StatisticsPresenter(view,
-						eventBus);
+				StatisticsPresenter presenter = new StatisticsPresenter(
+						service, view, eventBus);
 				presenter.go(container);
 			}
 
@@ -85,7 +92,7 @@ public class AppController implements ValueChangeHandler<String> {
 			public void onSuccess() {
 				ShoppingListView view = new DefaultShoppingListView();
 				ShoppingListPresenter presenter = new ShoppingListPresenter(
-						view, eventBus);
+						service, view, eventBus);
 				presenter.go(container);
 			}
 
@@ -110,8 +117,8 @@ public class AppController implements ValueChangeHandler<String> {
 			@Override
 			public void onSuccess() {
 				ShopView view = new DefaultShopView();
-				ShopPresenter presenter = new ShopPresenter(shopName, view,
-						eventBus);
+				ShopPresenter presenter = new ShopPresenter(service, shopName,
+						view, eventBus);
 				presenter.go(container);
 			}
 
@@ -132,7 +139,7 @@ public class AppController implements ValueChangeHandler<String> {
 			@Override
 			public void onSuccess() {
 				ItemView view = new DefaultItemView();
-				ItemPresenter presenter = new ItemPresenter(listId, view,
+				ItemPresenter presenter = new ItemPresenter(service, dtoService, listId, view,
 						eventBus);
 				presenter.go(container);
 			}

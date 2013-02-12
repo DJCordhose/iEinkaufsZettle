@@ -16,9 +16,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.client.Presenter;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
@@ -26,19 +24,17 @@ import eu.zeigermann.gwt.demo.shared.entity.Shop;
 
 public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler {
 
-	private ShoppingBoundaryDtoAsync service = GWT
-			.create(ShoppingBoundaryDto.class);
-
-	private ShoppingBoundaryAsync shopService = GWT
-			.create(ShoppingBoundary.class);
-
 	AsyncDataProvider<ItemDto> dataProvider;
 	ItemDto currentItem;
 	final int currentListId;
 	final ItemView view;
 	final HandlerManager eventBus;
+	final ShoppingBoundaryDtoAsync dtoService;
+	final ShoppingBoundaryAsync service;
 
-	public ItemPresenter(int listId, ItemView view, HandlerManager eventBus) {
+	public ItemPresenter(ShoppingBoundaryAsync service, ShoppingBoundaryDtoAsync dtoService, int listId, ItemView view, HandlerManager eventBus) {
+		this.service = service;
+		this.dtoService = dtoService;
 		this.currentListId = listId;
 		this.view = view;
 		this.eventBus = eventBus;
@@ -89,7 +85,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	}
 
 	private void initShops() {
-		shopService.getAllShops(new AsyncCallback<List<Shop>>() {
+		service.getAllShops(new AsyncCallback<List<Shop>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -104,7 +100,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	}
 
 	public void updateListName() {
-		service.getList(currentListId, new AsyncCallback<ShoppingListDto>() {
+		dtoService.getList(currentListId, new AsyncCallback<ShoppingListDto>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -119,7 +115,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	}
 
 	public void updateRowCount() {
-		service.getItemCount(currentListId, new AsyncCallback<Integer>() {
+		dtoService.getItemCount(currentListId, new AsyncCallback<Integer>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -153,7 +149,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 		final int start = range.getStart();
 		int length = range.getLength();
 
-		service.getItems(currentListId, start, length, sortInfo,
+		dtoService.getItems(currentListId, start, length, sortInfo,
 				new AsyncCallback<List<ItemDto>>() {
 
 					@Override
@@ -171,7 +167,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 
 	@Override
 	public void delete(ItemDto item) {
-		service.delete(item, new AsyncCallback<Void>() {
+		dtoService.delete(item, new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -196,7 +192,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	}
 
 	private void saveItem(ItemDto item) {
-		service.saveItem(item, new AsyncCallback<Void>() {
+		dtoService.saveItem(item, new AsyncCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void v) {
@@ -215,7 +211,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 		ItemDto itemDto = new ItemDto(name);
 		itemDto.listId = currentListId;
 		itemDto.shopId = view.getShopId();
-		service.addItem(itemDto, new AsyncCallback<Void>() {
+		dtoService.addItem(itemDto, new AsyncCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void v) {
@@ -230,7 +226,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	}
 
 	public void move(ItemDto toMove, ItemDto toPosition) {
-		service.insertItemAfter(toMove, toPosition, new AsyncCallback<Void>() {
+		dtoService.insertItemAfter(toMove, toPosition, new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

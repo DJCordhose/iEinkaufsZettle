@@ -15,17 +15,15 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.client.event.EditShopEvent;
 import eu.zeigermann.gwt.demo.client.statistics.flotwrapper.FlotData;
-import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
 
 public class StatisticsPresenter implements Presenter<StatisticsView>, StatisticsView.ViewHandler {
-	private ShoppingBoundaryAsync service = GWT
-			.create(ShoppingBoundary.class);
-
 	final StatisticsView view;
 	final HandlerManager eventBus;
+	final ShoppingBoundaryAsync service;
 
-	public StatisticsPresenter(StatisticsView view, HandlerManager eventBus) {
+	public StatisticsPresenter(ShoppingBoundaryAsync service, StatisticsView view, HandlerManager eventBus) {
+		this.service = service;
 		this.view = view;
 		view.setViewHandler(this);
 		this.eventBus = eventBus;
