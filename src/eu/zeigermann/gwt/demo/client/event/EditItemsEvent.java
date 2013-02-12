@@ -23,6 +23,6 @@ public class EditItemsEvent extends GwtEvent<EditItemsEventHandler> {
 
 	@Override
 	protected void dispatch(EditItemsEventHandler handler) {
-		handler.onEditContact(this);
+		handler.onEditItems(this);
 	}
 }

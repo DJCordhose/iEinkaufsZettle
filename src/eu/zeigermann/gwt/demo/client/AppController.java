@@ -10,6 +10,8 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
 import eu.zeigermann.gwt.demo.client.event.EditItemsEventHandler;
+import eu.zeigermann.gwt.demo.client.event.EditShopEvent;
+import eu.zeigermann.gwt.demo.client.event.EditShopEventHandler;
 import eu.zeigermann.gwt.demo.client.item.DefaultItemView;
 import eu.zeigermann.gwt.demo.client.item.ItemPresenter;
 import eu.zeigermann.gwt.demo.client.item.ItemView;
@@ -19,6 +21,9 @@ import eu.zeigermann.gwt.demo.client.list.ShoppingListView;
 import eu.zeigermann.gwt.demo.client.shop.DefaultShopView;
 import eu.zeigermann.gwt.demo.client.shop.ShopPresenter;
 import eu.zeigermann.gwt.demo.client.shop.ShopView;
+import eu.zeigermann.gwt.demo.client.statistics.DefaultStatisticsView;
+import eu.zeigermann.gwt.demo.client.statistics.StatisticsPresenter;
+import eu.zeigermann.gwt.demo.client.statistics.StatisticsView;
 
 public class AppController implements ValueChangeHandler<String> {
 	private final HandlerManager eventBus;
@@ -35,8 +40,37 @@ public class AppController implements ValueChangeHandler<String> {
 		eventBus.addHandler(EditItemsEvent.TYPE, new EditItemsEventHandler() {
 
 			@Override
-			public void onEditContact(EditItemsEvent event) {
+			public void onEditItems(EditItemsEvent event) {
 				doEditItems(event.getList().getId(), true);
+			}
+		});
+		eventBus.addHandler(EditShopEvent.TYPE, new EditShopEventHandler() {
+
+			@Override
+			public void onEditShop(EditShopEvent event) {
+				doEditShops(event.getShopName(), true);
+			}
+		});
+	}
+
+	private void doStatistics(boolean createHistory) {
+		if (createHistory) {
+			History.newItem("statistics", false);
+		}
+		GWT.runAsync(StatisticsPresenter.class, new RunAsyncCallback() {
+
+			@Override
+			public void onSuccess() {
+				StatisticsView view = new DefaultStatisticsView();
+				StatisticsPresenter presenter = new StatisticsPresenter(view,
+						eventBus);
+				presenter.go(container);
+			}
+
+			@Override
+			public void onFailure(Throwable reason) {
+				GWT.log("Loading of module" + ShoppingListPresenter.class
+						+ " failed for reason: " + reason);
 			}
 		});
 	}
@@ -63,16 +97,21 @@ public class AppController implements ValueChangeHandler<String> {
 		});
 	}
 
-	private void doEditShops(boolean createHistory) {
+	private void doEditShops(final String shopName, boolean createHistory) {
 		if (createHistory) {
-			History.newItem("editShops", false);
+			if (shopName != null) {
+				History.newItem("editShops:" + shopName, false);
+			} else {
+				History.newItem("editShops", false);
+			}
 		}
 		GWT.runAsync(ShopPresenter.class, new RunAsyncCallback() {
 
 			@Override
 			public void onSuccess() {
 				ShopView view = new DefaultShopView();
-				ShopPresenter presenter = new ShopPresenter(view, eventBus);
+				ShopPresenter presenter = new ShopPresenter(shopName, view,
+						eventBus);
 				presenter.go(container);
 			}
 
@@ -122,15 +161,25 @@ public class AppController implements ValueChangeHandler<String> {
 		if (token != null) {
 			if (token.equalsIgnoreCase("editLists")) {
 				doEditLists(false);
-			} else if (token.equalsIgnoreCase("editShops")) {
-				doEditShops(false);
+			} else if (token.startsWith("editShops")) {
+				String[] split = token.split(":");
+				final String shopName;
+				if (split.length >= 2) {
+					shopName = split[1];
+				} else {
+					shopName = null;
+				}
+				doEditShops(shopName, false);
 			} else if (token.startsWith("editList:")) {
 				String[] split = token.split(":");
 				if (split.length >= 2) {
 					int listId = Integer.valueOf(split[1]);
 					doEditItems(listId, false);
 				}
+			} else if (token.equalsIgnoreCase("statistics")) {
+				doStatistics(false);
 			}
 		}
 	}
+
 }

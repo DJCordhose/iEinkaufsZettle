@@ -20,15 +20,15 @@ import eu.zeigermann.gwt.demo.shared.entity.Shop;
 public class ShopPresenter implements Presenter<ShopView>, ShopView.ViewHandler {
 
 	private ShoppingBoundaryAsync service = GWT.create(ShoppingBoundary.class);
-	private ShoppingBoundaryDtoAsync dtoService = GWT
-			.create(ShoppingBoundaryDto.class);
 
 	ListDataProvider<Shop> dataProvider = new ListDataProvider<Shop>();
 	Shop currentEntity;
+	final String requestedShopName;
 	final ShopView view;
 	final HandlerManager eventBus;
 	
-	public ShopPresenter(ShopView view, HandlerManager eventBus) {
+	public ShopPresenter(String requestedShopName, ShopView view, HandlerManager eventBus) {
+		this.requestedShopName = requestedShopName;
 		this.view = view;
 		view.setViewHandler(this);
 		view.setDataProvider(dataProvider);
@@ -103,6 +103,13 @@ public class ShopPresenter implements Presenter<ShopView>, ShopView.ViewHandler 
 			public void onSuccess(List<Shop> result) {
 				dataProvider.getList().clear();
 				dataProvider.getList().addAll(result);
+				if (requestedShopName != null) {
+					for (Shop shop : result) {
+						if (shop.getName().equals(requestedShopName)) {
+							edit(shop);
+						}
+					}
+				}
 			}
 		});
 	}
@@ -116,9 +123,9 @@ public class ShopPresenter implements Presenter<ShopView>, ShopView.ViewHandler 
 		this.dataProvider = dataProvider;
 	}
 
-	public void edit(Shop list) {
-		this.currentEntity = list;
-		view.edit(list);
+	public void edit(Shop shop) {
+		this.currentEntity = shop;
+		view.edit(shop);
 	}
 
 	public HandlerManager getEventBus() {

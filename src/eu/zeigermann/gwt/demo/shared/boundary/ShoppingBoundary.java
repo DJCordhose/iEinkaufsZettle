@@ -1,6 +1,7 @@
 package eu.zeigermann.gwt.demo.shared.boundary;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -25,6 +26,8 @@ public interface ShoppingBoundary extends RemoteService {
 	List<Shop> getAllShops();
 
 	Shop save(Shop currentEntity);
+
+	Map<String, Integer> statistics();
 	
 
 }

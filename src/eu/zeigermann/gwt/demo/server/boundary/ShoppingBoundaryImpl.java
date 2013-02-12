@@ -1,6 +1,7 @@
 package eu.zeigermann.gwt.demo.server.boundary;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -74,5 +75,10 @@ public class ShoppingBoundaryImpl extends AbstractSpringBoundary
 		Shop saved = service.save(shop);
 		Shop detached = wrapDetachService.detach(saved);
 		return detached;
+	}
+	
+	@Override
+	public Map<String, Integer> statistics() {
+		return service.statistics();
 	}
 }

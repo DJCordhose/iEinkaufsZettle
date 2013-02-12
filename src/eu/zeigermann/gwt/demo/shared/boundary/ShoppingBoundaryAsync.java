@@ -1,6 +1,7 @@
 package eu.zeigermann.gwt.demo.shared.boundary;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -24,5 +25,7 @@ public interface ShoppingBoundaryAsync {
 	void createShop(String name, AsyncCallback<Shop> asyncCallback);
 
 	void getAllShops(AsyncCallback<List<Shop>> asyncCallback);
+
+	void statistics(AsyncCallback<Map<String, Integer>> callback);
 
 }

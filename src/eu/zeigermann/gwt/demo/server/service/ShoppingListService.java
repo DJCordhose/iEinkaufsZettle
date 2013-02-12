@@ -1,5 +1,6 @@
 package eu.zeigermann.gwt.demo.server.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -139,6 +140,27 @@ public class ShoppingListService {
 		int index = items.indexOf(position);
 		items.add(index + (after ? 1 : 0), itemToMove);
 		list.refreshPositions();
+	}
+	
+	public Map<String, Integer> statistics() {
+		// init data with all shops having count 0
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		List<Shop> allShops = getAllShops();
+		for (Shop shop : allShops) {
+			data.put(shop.getName(), 0);
+		}
+		// XXX could be done more efficiently using a dedicated query, but we do not care :)
+		List<ShoppingList> allLists = getAllLists();
+		for (ShoppingList list : allLists) {
+			List<Item> items = list.getItems();
+			for (Item item : items) {
+				Shop shop = item.getShop();
+				int count = data.get(shop.getName());
+				count++;
+				data.put(shop.getName(), count);
+			}
+		}
+		return data;
 	}
 
 }
