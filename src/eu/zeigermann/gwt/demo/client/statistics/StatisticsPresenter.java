@@ -33,8 +33,8 @@ public class StatisticsPresenter implements Presenter<StatisticsView>, Statistic
 	public void go(HasWidgets container) {
 		container.clear();
 //		loadGwtRpc();
-//		loadRest();
-		loadJsonp();
+		loadRest();
+//		loadJsonp();
 		container.add(view.asWidget());
 	}
 
@@ -54,7 +54,7 @@ public class StatisticsPresenter implements Presenter<StatisticsView>, Statistic
 	}
 	
 	private void loadRest() {
-		String url = GWT.getModuleBaseURL() + "statisticsrs";
+		String url = getRemoteAddress();
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 
 		try {
@@ -83,8 +83,14 @@ public class StatisticsPresenter implements Presenter<StatisticsView>, Statistic
 		}
 	}
 
-	private void loadJsonp() {
+	private String getRemoteAddress() {
 		String url = GWT.getModuleBaseURL() + "statisticsrs";
+//		String url = "http://127.0.0.1:8888/zettle/"+ "statisticsrs";
+		return url;
+	}
+
+	private void loadJsonp() {
+		String url = getRemoteAddress();
 		JsonpRequestBuilder jsonp = new JsonpRequestBuilder();
 		jsonp.requestObject(url,
 			     new AsyncCallback<StatisticsJsni>() {

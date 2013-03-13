@@ -256,6 +256,7 @@ public class DefaultItemView extends Composite implements ItemView {
 				return dto.getName();
 			}
 		};
+		nameColumn.setSortable(true);
 		nameColumn.setDataStoreName("name");
 		cellTable.addColumn(nameColumn, "Name");
 		cellTable.setColumnWidth(nameColumn, 500, Style.Unit.PX);

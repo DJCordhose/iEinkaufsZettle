@@ -64,32 +64,6 @@ public class StatisticsRestEndpoint extends AbstractSpringServlet {
 		}
 	}
 
-	private List<String> getParameters(HttpServletRequest req) {
-		final String pathInfo = req.getPathInfo();
-		if (pathInfo == null || pathInfo.length() == 0) {
-			return Collections.emptyList();
-		}
-		String parameterString = pathInfo;
-		if (parameterString.startsWith("/")) {
-			parameterString = parameterString.substring(1);
-		}
-		String[] split = parameterString.split("/");
-		List<String> parameters = Arrays.asList(split);
-		return parameters;
-	}
-
-	private <T> T readParameterFromBody(HttpServletRequest req,
-			Class<T> classOfT) {
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					req.getInputStream(), "UTF-8"));
-			T t = mapper.readValue(reader, classOfT);
-			return t;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override
 	protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {

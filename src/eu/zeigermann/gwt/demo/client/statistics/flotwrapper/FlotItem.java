@@ -15,7 +15,7 @@ public final class FlotItem extends JavaScriptObject {
 		return this.series.color;
 	}-*/;
 	
-	public native int getPercent() /*-{
+	public native double getPercent() /*-{
 		return this.series.percent;
 	}-*/;
 

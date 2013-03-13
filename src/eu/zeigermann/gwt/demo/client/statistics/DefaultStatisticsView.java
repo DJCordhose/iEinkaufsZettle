@@ -53,7 +53,7 @@ public class DefaultStatisticsView extends Composite implements StatisticsView {
 					public void onHovered(FlotPosition pos, FlotItem item) {
 						String color = item.getColor();
 						String itemLabel = item.getLabel();
-						int percent = item.getPercent();
+						int percent = (int) Math.round(item.getPercent());
 						label.getElement().setInnerHTML(
 								"<span style=\"font-weight: bold; color: "
 										+ color + "\">" + itemLabel + " ("

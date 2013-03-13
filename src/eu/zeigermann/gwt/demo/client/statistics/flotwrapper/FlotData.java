@@ -11,6 +11,8 @@ public final class FlotData extends JavaScriptObject {
 	protected FlotData() {
 	}
 
+	// das soll raus kommen
+	//	[{"label": "Edeka", "data": 0},{"label":"Penny", "data":1}, ...]
 	public static FlotData getInstance(Map<String, Integer> data) {
 		String dataAsJson = "[";
 		Set<Entry<String, Integer>> entrySet = data.entrySet();

@@ -132,7 +132,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 	@Override
 	public void loadData(Range range, ColumnSortList sortList) {
 		// XXX this data structure looses the order of sorting, but it is good
-		// enough for and to get the point across
+		// enough to get the point across
 		Map<String, Boolean> sortInfo = new HashMap<String, Boolean>();
 		for (int i = 0; i < sortList.size(); i++) {
 			ColumnSortInfo columnSortInfo = sortList.get(0);
@@ -141,7 +141,7 @@ public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler 
 					.getDataStoreName();
 			if (dataStoreName == null) {
 				throw new IllegalArgumentException(
-						"If you want to sort a column on the server, give it data store name!");
+						"If you want to sort a column on the server, give it a data store name!");
 			}
 			sortInfo.put(dataStoreName, ascending);
 
