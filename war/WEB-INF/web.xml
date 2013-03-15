@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	   <!-- Spring -->
 	<context-param>
@@ -35,21 +30,35 @@
   
   <servlet-mapping>
     <servlet-name>listServlet</servlet-name>
-    <url-pattern>zettle/list</url-pattern>
+    <url-pattern>/zettle/list</url-pattern>
   </servlet-mapping>
   
   <servlet-mapping>
     <servlet-name>listDtoServlet</servlet-name>
-    <url-pattern>zettle/dto</url-pattern>
+    <url-pattern>/zettle/dto</url-pattern>
   </servlet-mapping>
   
    <servlet-mapping>
     <servlet-name>statisticsRestEndpoint</servlet-name>
-    <url-pattern>zettle/statisticsrs/*</url-pattern>
+    <url-pattern>/zettle/statisticsrs/*</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+
+  <servlet>
+    <servlet-name>SystemServiceServlet</servlet-name>
+    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+    <init-param>
+      <param-name>services</param-name>
+      <param-value/>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SystemServiceServlet</servlet-name>
+    <url-pattern>/_ah/spi/*</url-pattern>
+  </servlet-mapping>
 
 </web-app>
