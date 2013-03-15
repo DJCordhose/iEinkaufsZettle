@@ -14,10 +14,10 @@ import org.dozer.Mapper;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
-import eu.zeigermann.gwt.demo.shared.entity.AbstractShoppingEntity;
-import eu.zeigermann.gwt.demo.shared.entity.Item;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.AbstractShoppingEntity;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Item;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 @Named
 public class WrapDetachService {

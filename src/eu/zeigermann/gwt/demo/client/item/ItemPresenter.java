@@ -20,7 +20,7 @@ import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDtoAsync;
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public class ItemPresenter implements Presenter<ItemView>, ItemView.ViewHandler {
 

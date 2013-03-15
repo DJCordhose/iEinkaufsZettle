@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import eu.zeigermann.gwt.demo.server.service.ShoppingListService;
 import eu.zeigermann.gwt.demo.server.service.WrapDetachService;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 @SuppressWarnings("serial")
 public class ShoppingBoundaryImpl extends AbstractSpringBoundary

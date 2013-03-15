@@ -10,8 +10,8 @@ import eu.zeigermann.gwt.demo.server.service.WrapDetachService;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryDto;
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
 import eu.zeigermann.gwt.demo.shared.dto.ShoppingListDto;
-import eu.zeigermann.gwt.demo.shared.entity.Item;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Item;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 @SuppressWarnings("serial")
 public class ShoppingBoundaryDtoImpl extends AbstractSpringBoundary

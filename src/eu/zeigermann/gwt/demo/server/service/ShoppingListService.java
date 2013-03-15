@@ -14,10 +14,10 @@ import javax.persistence.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
-import eu.zeigermann.gwt.demo.shared.entity.AbstractShoppingEntity;
-import eu.zeigermann.gwt.demo.shared.entity.Item;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.AbstractShoppingEntity;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Item;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 @Named
 // could be optimized to place it only before really transactional methods

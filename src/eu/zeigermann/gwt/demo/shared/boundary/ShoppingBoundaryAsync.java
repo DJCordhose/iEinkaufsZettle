@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 public interface ShoppingBoundaryAsync {
 

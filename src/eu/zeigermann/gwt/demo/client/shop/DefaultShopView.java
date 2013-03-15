@@ -44,7 +44,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public class DefaultShopView extends Composite implements ShopView { 
 

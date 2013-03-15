@@ -6,8 +6,8 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 @RemoteServiceRelativePath("list")
 public interface ShoppingBoundary extends RemoteService {

@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 import com.google.gwt.event.shared.HandlerManager;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public class ShopPresenterTest extends TestCase {
 	private static final String REQUESTED_SHOP = "Aldi";

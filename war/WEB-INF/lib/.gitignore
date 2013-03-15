@@ -1,1 +1,6 @@
 /gwt-servlet.jar
+/appengine-api-1.0-sdk-1.7.5.jar
+/appengine-api-labs.jar
+/appengine-endpoints.jar
+/appengine-jsr107cache-1.7.5.jar
+/jsr107cache-1.1.jar

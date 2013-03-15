@@ -8,7 +8,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public interface ItemView {
 	public interface ViewHandler {

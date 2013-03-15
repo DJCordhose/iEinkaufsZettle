@@ -1,4 +1,4 @@
-package eu.zeigermann.gwt.demo.shared.entity;
+package eu.zeigermann.gwt.demo.shared.entity.jpa;
 
 import java.io.Serializable;
 

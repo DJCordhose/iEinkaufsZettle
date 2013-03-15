@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public class ShopPresenterGWTTest extends GWTTestCase {
 	private static final String REQUESTED_SHOP = "Aldi";

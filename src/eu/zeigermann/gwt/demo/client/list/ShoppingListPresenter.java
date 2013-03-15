@@ -11,7 +11,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.client.event.EditItemsEvent;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.entity.ShoppingList;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;
 
 public class ShoppingListPresenter implements Presenter<ShoppingListView>, ShoppingListView.ViewHandler {
 

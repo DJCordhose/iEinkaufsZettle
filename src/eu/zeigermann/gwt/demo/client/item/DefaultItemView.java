@@ -52,7 +52,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 
 import eu.zeigermann.gwt.demo.shared.dto.ItemDto;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public class DefaultItemView extends Composite implements ItemView {
 

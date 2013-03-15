@@ -10,7 +10,7 @@ import com.google.gwt.view.client.ListDataProvider;
 
 import eu.zeigermann.gwt.demo.client.Presenter;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundaryAsync;
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public class ShopPresenter implements Presenter<ShopView>, ShopView.ViewHandler {
 

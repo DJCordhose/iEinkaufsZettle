@@ -3,7 +3,7 @@ package eu.zeigermann.gwt.demo.client.shop;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 
-import eu.zeigermann.gwt.demo.shared.entity.Shop;
+import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 
 public interface ShopView {
 	public interface ViewHandler {
