@@ -104,6 +104,10 @@
   <target name="clean" description="Cleans this project">
     <delete dir="war/WEB-INF/classes" failonerror="false" />
     <delete dir="war/ieinkaufszettle" failonerror="false" />
+    <delete dir="gwt-unitCache" failonerror="false" />
+    <delete dir="reports" failonerror="false" />
+    <delete dir="wwww-test" failonerror="false" />
+    <delete dir="extras" failonerror="false" />
   </target>
 
 </project>

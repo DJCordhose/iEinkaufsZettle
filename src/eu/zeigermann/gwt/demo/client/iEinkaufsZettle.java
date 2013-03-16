@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class iEinkaufsZettle implements EntryPoint {
 	
 	public void onModuleLoad() {
-		// takes over formatting of whole page, making bootstrap menues impossible
+		// takes over formatting of whole page, making bootstrap menus impossible
 //		RootLayoutPanel root = RootLayoutPanel.get();
 		RootPanel root = RootPanel.get();
 	    HandlerManager eventBus = new HandlerManager(null);
