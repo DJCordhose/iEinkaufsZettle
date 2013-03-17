@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import eu.zeigermann.gwt.demo.server.service.ShoppingListService;
-import eu.zeigermann.gwt.demo.server.service.WrapDetachService;
+import eu.zeigermann.gwt.demo.server.service.jpa.ShoppingListService;
+import eu.zeigermann.gwt.demo.server.service.jpa.WrapDetachService;
 import eu.zeigermann.gwt.demo.shared.boundary.ShoppingBoundary;
 import eu.zeigermann.gwt.demo.shared.entity.jpa.Shop;
 import eu.zeigermann.gwt.demo.shared.entity.jpa.ShoppingList;

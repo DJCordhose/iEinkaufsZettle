@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import eu.zeigermann.gwt.demo.server.service.ShoppingListService;
+import eu.zeigermann.gwt.demo.server.service.jpa.ShoppingListService;
 
 @SuppressWarnings("serial")
 public class StatisticsRestEndpoint extends AbstractSpringServlet {

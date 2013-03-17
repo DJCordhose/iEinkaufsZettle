@@ -1,4 +1,4 @@
-package eu.zeigermann.gwt.demo.server.service;
+package eu.zeigermann.gwt.demo.server.service.jpa;
 
 import java.util.HashMap;
 import java.util.List;

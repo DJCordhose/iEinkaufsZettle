@@ -61,4 +61,12 @@
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
 
+<filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+</filter>
+<filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/zettle/objectify/*</url-pattern>
+</filter-mapping>
 </web-app>

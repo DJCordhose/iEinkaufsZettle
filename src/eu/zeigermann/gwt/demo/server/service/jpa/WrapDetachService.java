@@ -1,4 +1,4 @@
-package eu.zeigermann.gwt.demo.server.service;
+package eu.zeigermann.gwt.demo.server.service.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
